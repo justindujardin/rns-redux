@@ -140,15 +140,15 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "react": "^16.7-alpha || ^16.8-alpha || ^16.8",
-    "react-dom": "^16.7-alpha || ^16.8-alpha || ^16.8",
+    "react": "^16.7-alpha || ^16.8-alpha || ^16.8 || ^16.7",
+    "react-dom": "^16.7-alpha || ^16.8-alpha || ^16.8 || ^16.7",
     "react-notification-system": ">0.2.7",
     "redux": "^4.0.1"
   },
   "peerDependencies": {
     "react-notification-system": ">0.2.7",
-    "react": "^16.7-alpha || ^16.8-alpha || ^16.8",
-    "react-dom": "^16.7-alpha || ^16.8-alpha || ^16.8",
+    "react": "^16.7-alpha || ^16.8-alpha || ^16.8 || ^16.7",
+    "react-dom": "^16.7-alpha || ^16.8-alpha || ^16.8 || ^16.7",
     "redux": "^4.0.1"
   }
 }
