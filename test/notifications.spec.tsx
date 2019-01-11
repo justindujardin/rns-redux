@@ -5,6 +5,14 @@ import { RNSComponent, RNSReducer } from '../src'
 import * as NotifySystem from 'react-notification-system'
 import { mount } from 'enzyme'
 
+function timeout(ms: number): Promise<void> {
+  return new Promise<void>(function promiseTimeout(resolve) {
+    setTimeout(() => {
+      resolve(undefined)
+    }, ms)
+  })
+}
+
 describe('NotificationsComponent', () => {
   const notification = {
     title: "Hey, it's good to see you!",
@@ -81,7 +89,7 @@ describe('NotificationsComponent', () => {
     expect(html).not.toContain('6th')
   })
 
-  it('calls onRemove once the notification is auto dismissed', done => {
+  it('calls onRemove once the notification is auto dismissed', async () => {
     const wrapper = mountComponent()
     const onRemove = sinon.spy()
 
@@ -95,13 +103,11 @@ describe('NotificationsComponent', () => {
       ]
     })
 
-    setTimeout(() => {
-      expect(onRemove.called).toBe(true)
-      done()
-    }, 1100)
+    await timeout(1100)
+    expect(onRemove.called).toBe(true)
   })
 
-  it('calls onRemove once the notification is manually dismissed', done => {
+  it('calls onRemove once the notification is manually dismissed', async () => {
     const wrapper = mountComponent()
     const onRemove = sinon.spy()
     const onCallback = sinon.spy()
@@ -122,14 +128,12 @@ describe('NotificationsComponent', () => {
 
     wrapper.find('button').simulate('click')
 
-    setTimeout(() => {
-      expect(onCallback.called).toBe(true)
-      expect(onRemove.called).toBe(true)
-      done()
-    }, 50)
+    await timeout(50)
+    expect(onCallback.called).toBe(true)
+    expect(onRemove.called).toBe(true)
   })
 
-  it('calls onRemove once the notification is auto dismissed while style is false', done => {
+  it('calls onRemove once the notification is auto dismissed while style is false', async () => {
     const wrapper = mountComponent({ style: false })
     const onRemove = sinon.spy()
 
@@ -143,13 +147,11 @@ describe('NotificationsComponent', () => {
       ]
     })
 
-    setTimeout(() => {
-      expect(onRemove.called).toBe(true)
-      done()
-    }, 1100)
+    await timeout(1100)
+    expect(onRemove.called).toBe(true)
   })
 
-  it('calls onRemove once the notification is manually dismissed while style is false', done => {
+  it('calls onRemove once the notification is manually dismissed while style is false', async () => {
     const wrapper = mountComponent({ style: false })
     const onRemove = sinon.spy()
     const onCallback = sinon.spy()
@@ -170,10 +172,8 @@ describe('NotificationsComponent', () => {
 
     wrapper.find('button').simulate('click')
 
-    setTimeout(() => {
-      expect(onCallback.called).toBe(true)
-      expect(onRemove.called).toBe(true)
-      done()
-    }, 50)
+    await timeout(50)
+    expect(onCallback.called).toBe(true)
+    expect(onRemove.called).toBe(true)
   })
 })
