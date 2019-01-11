@@ -5,7 +5,7 @@
   "keywords": [],
   "main": "dist/rns-redux.umd.js",
   "module": "dist/rns-redux.es5.js",
-  "typings": "dist/types/rns-redux.d.ts",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
