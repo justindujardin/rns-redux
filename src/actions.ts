@@ -1,6 +1,9 @@
 import { RNSOpts, RNSLevel } from './util'
 import { Action } from 'redux'
 
+/**
+ * Show a notification with the given options and level.
+ */
 export class RNSShowAction implements Action {
   private static _uidCount = 0
   static typeId: '@SHOW_NOTIFICATION' = '@SHOW_NOTIFICATION'
