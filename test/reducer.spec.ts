@@ -1,5 +1,4 @@
-import { RNSHideAction, RNSSuccessAction, RNSClearAction } from './../src/actions'
-import { RNSReducer } from '../src/reducer'
+import { RNSReducer, RNSHideAction, RNSSuccessAction, RNSClearAction } from './../src'
 
 describe('reducer', () => {
   it('initializes state with an array', () => {

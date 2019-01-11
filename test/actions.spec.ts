@@ -1,4 +1,4 @@
-import { RNSSuccessAction, RNSErrorAction, RNSInfoAction, RNSWarningAction } from '../src/actions'
+import { RNSSuccessAction, RNSErrorAction, RNSInfoAction, RNSWarningAction } from '../src'
 
 describe('redux actions', () => {
   it('should set the correct notification level when using convenience class actions', () => {

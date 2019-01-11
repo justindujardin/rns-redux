@@ -1,9 +1,8 @@
 import './fixture'
 import * as React from 'react'
 import * as sinon from 'sinon'
-import { RNSComponent } from '../src/notifications'
+import { RNSComponent, RNSReducer } from '../src'
 import * as NotifySystem from 'react-notification-system'
-import { RNSReducer } from '../src/reducer'
 import { mount } from 'enzyme'
 
 describe('NotificationsComponent', () => {
