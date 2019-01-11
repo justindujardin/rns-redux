@@ -1,11 +1,11 @@
 {
-  "name": "react-redux-notifications",
+  "name": "rns-redux",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "main": "dist/react-redux-notifications.umd.js",
-  "module": "dist/react-redux-notifications.es5.js",
-  "typings": "dist/types/react-redux-notifications.d.ts",
+  "main": "dist/rns-redux.umd.js",
+  "module": "dist/rns-redux.es5.js",
+  "typings": "dist/types/rns-redux.d.ts",
   "files": [
     "dist"
   ],
