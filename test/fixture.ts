@@ -1,5 +1,5 @@
 /*! This creates a DOM for testing fully mounted headless components using JSDom and Enzyme. */
-import * as Adapter from 'enzyme-adapter-react-16'
+import Adapter from 'enzyme-adapter-react-16'
 import { configure } from 'enzyme'
 const { JSDOM } = require('jsdom')
 const jsdom = new JSDOM('<!doctype html><html><body><div id="root"/></body></html>')

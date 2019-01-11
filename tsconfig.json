@@ -8,6 +8,7 @@
     "sourceMap": true,
     "jsx": "react",
     "declaration": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
