@@ -1,8 +1,8 @@
 import './fixture'
-import * as React from 'react'
-import * as sinon from 'sinon'
+import React from 'react'
+import sinon from 'sinon'
 import { RNSComponent, RNSReducer } from '../src'
-import * as NotifySystem from 'react-notification-system'
+import NotifySystem from 'react-notification-system'
 import { mount } from 'enzyme'
 
 function timeout(ms: number): Promise<void> {

@@ -1,5 +1,5 @@
-import * as React from 'react'
-import * as rns from 'react-notification-system'
+import React from 'react'
+import ReactNotificationSystem, { System } from 'react-notification-system'
 import { Dispatch, Action } from 'redux'
 import { RNSOpts } from './util'
 import { RNSHideAction, RNSActionTypes } from './actions'
@@ -11,7 +11,7 @@ export interface RNSComponentProps<T = any> {
 
 export class RNSComponent<T = {}> extends React.Component<RNSComponentProps<T>> {
   notify: React.RefObject<any> = React.createRef()
-  system(): rns.System {
+  system(): System {
     return this.notify.current
   }
 
@@ -62,7 +62,6 @@ export class RNSComponent<T = {}> extends React.Component<RNSComponentProps<T>> 
 
   render() {
     const { notifications, ...rest } = this.props
-    const Component = rns
-    return <Component ref={this.notify} {...rest} />
+    return <ReactNotificationSystem ref={this.notify} {...rest} />
   }
 }
