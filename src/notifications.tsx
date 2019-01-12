@@ -7,6 +7,9 @@ import { NotifyHide, NotifyActionTypes } from './actions'
 export interface NotifyComponentProps<T = any> {
   notifications: NotifyOpts[]
   dispatch?: Dispatch<Action<T>>
+  // TODO: remove this indexer when RNS types are complete and this extends the base props.
+  // This allows any arbitrary props to be passed through.. :/ see the {...rest} splat
+  [key: string]: any
 }
 
 export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProps<T>> {
