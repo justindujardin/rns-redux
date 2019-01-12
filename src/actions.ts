@@ -1,56 +1,96 @@
-import { RNSOpts, RNSLevel } from './util'
+import { NotifyOpts, NotifyLevel } from './util'
 import { Action } from 'redux'
 
 /**
- * Show a notification with the given options and level.
+ * REALLY lame unique id generation for notifications that don't provide
+ * a value for "uid"
+ * @internal
  */
-export class RNSShowAction implements Action {
-  private static _uidCount = 0
-  static typeId: '@SHOW_NOTIFICATION' = '@SHOW_NOTIFICATION'
-  type = RNSShowAction.typeId
-  constructor(public payload: Partial<RNSOpts>, level: RNSLevel) {
-    this.payload.level = level
-    if (!this.payload.uid) {
-      this.payload.uid = `notify_${++RNSShowAction._uidCount}`
+let uidCounter = 0
+
+/** String literal type used for show notification action "type" */
+export const NotifyShowType = '@showNotification'
+/** Redux action object for showing a notification */
+export interface INotifyShow extends Action {
+  readonly type: '@showNotification'
+  readonly payload: Partial<NotifyOpts>
+}
+/** Show a notification with the given options and level */
+export function NotifyShow(payload: Partial<NotifyOpts>, level: NotifyLevel): INotifyShow {
+  return {
+    type: NotifyShowType,
+    payload: {
+      ...payload,
+      // The level is set by the caller
+      level,
+      // Add a UID if none is present
+      uid: payload.uid || `notify_${++uidCounter}`
     }
   }
 }
+/** String literal type constant for hide notification action "type" member */
+export const NotifyHideType = '@hideNotification'
+/** Redux action object shape for hiding a notification */
+export interface INotifyHide extends Action {
+  readonly payload: number | string
+  readonly type: '@hideNotification'
+}
+/**
+ * Generate a redux {@see Action} object that hides any notification with
+ * the given id when dispatched
+ */
+export function NotifyHide(uid: number | string): INotifyHide {
+  return {
+    type: NotifyHideType,
+    payload: uid
+  }
+}
+/** String literal type constant for clear notifications action "type" member */
+export const NotifyClearType = '@clearNotifications'
+/** Redux action object shape for clearing all notifications */
+export interface INotifyClear extends Action {
+  readonly type: '@clearNotifications'
+}
+/**
+ * Generate a redux {@see Action} object that clear all notifications when dispatched
+ */
+export function NotifyClear(): INotifyClear {
+  return {
+    type: NotifyClearType
+  }
+}
 
-export class RNSHideAction implements Action {
-  static typeId: '@HIDE_NOTIFICATION' = '@HIDE_NOTIFICATION'
-  type = RNSHideAction.typeId
-  constructor(public payload?: string | number) {}
+/**
+ * Generate a redux {@see Action} object shows a notification with the "success"
+ * styles applied when dispatched
+ */
+export function NotifySuccess(payload: Partial<NotifyOpts>) {
+  return NotifyShow(payload, 'success')
 }
-
-export class RNSClearAction implements Action {
-  static typeId: '@CLEAR_ALL_NOTIFICIATIONS' = '@CLEAR_ALL_NOTIFICIATIONS'
-  type = RNSClearAction.typeId
-  payload = null
+/**
+ * Generate a redux {@see Action} object shows a notification with the "error"
+ * styles applied when dispatched
+ */
+export function NotifyError(payload: Partial<NotifyOpts>) {
+  return NotifyShow(payload, 'error')
 }
-
-export class RNSSuccessAction extends RNSShowAction {
-  constructor(public payload: Partial<RNSOpts>) {
-    super(payload, 'success')
-  }
+/**
+ * Generate a redux {@see Action} object shows a notification with the "warning"
+ * styles applied when dispatched
+ */
+export function NotifyWarning(payload: Partial<NotifyOpts>) {
+  return NotifyShow(payload, 'warning')
 }
-export class RNSErrorAction extends RNSShowAction {
-  constructor(public payload: Partial<RNSOpts>) {
-    super(payload, 'error')
-  }
-}
-export class RNSWarningAction extends RNSShowAction {
-  constructor(public payload: Partial<RNSOpts>) {
-    super(payload, 'warning')
-  }
-}
-export class RNSInfoAction extends RNSShowAction {
-  constructor(public payload: Partial<RNSOpts>) {
-    super(payload, 'info')
-  }
+/**
+ * Generate a redux {@see Action} object shows a notification with the "info"
+ * styles applied when dispatched
+ */
+export function NotifyInfo(payload: Partial<NotifyOpts>) {
+  return NotifyShow(payload, 'info')
 }
 
 /**
  * Tagged union types (note the convenience functions that set levels are not
- * here because they share an action type with RNSShowAction)
+ * here because they share an action type with IShowNotification)
  */
-export type RNSActionTypes = RNSShowAction | RNSHideAction | RNSClearAction
+export type NotifyActionTypes = INotifyShow | INotifyHide | INotifyClear

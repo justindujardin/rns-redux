@@ -1,23 +1,20 @@
-import { RNSShowAction, RNSHideAction, RNSClearAction, RNSActionTypes } from './actions'
-import { exhaustiveCheck, RNSOpts } from './util'
+import { NotifyShowType, NotifyHideType, NotifyClearType, NotifyActionTypes } from './actions'
+import { exhaustiveCheck, NotifyOpts } from './util'
 
-export type NotificationsStoreState = RNSOpts[]
+export type NotifyState = NotifyOpts[]
 
-export function RNSReducer(
-  state: NotificationsStoreState = [],
-  action?: RNSActionTypes
-): NotificationsStoreState {
+export function NotifyReducer(state: NotifyState = [], action?: NotifyActionTypes): NotifyState {
   if (action) {
     switch (action.type) {
-      case RNSShowAction.typeId: {
-        const ops = action.payload as RNSOpts
+      case NotifyShowType: {
+        const ops = action.payload as NotifyOpts
         return [...state, { ...ops }]
       }
-      case RNSHideAction.typeId: {
+      case NotifyHideType: {
         const { payload } = action
         return state.filter(notification => notification.uid !== payload)
       }
-      case RNSClearAction.typeId: {
+      case NotifyClearType: {
         return []
       }
       /* istanbul ignore next */

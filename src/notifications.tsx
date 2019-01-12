@@ -1,21 +1,21 @@
 import React from 'react'
 import ReactNotificationSystem, { System } from 'react-notification-system'
 import { Dispatch, Action } from 'redux'
-import { RNSOpts } from './util'
-import { RNSHideAction, RNSActionTypes } from './actions'
+import { NotifyOpts } from './util'
+import { NotifyHide, NotifyActionTypes } from './actions'
 
-export interface RNSComponentProps<T = any> {
-  notifications: RNSOpts[]
+export interface NotifyComponentProps<T = any> {
+  notifications: NotifyOpts[]
   dispatch?: Dispatch<Action<T>>
 }
 
-export class RNSComponent<T = {}> extends React.Component<RNSComponentProps<T>> {
+export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProps<T>> {
   notify: React.RefObject<any> = React.createRef()
   system(): System {
     return this.notify.current
   }
 
-  getDispatch(): Dispatch<RNSActionTypes> {
+  getDispatch(): Dispatch<NotifyActionTypes> {
     const result = this.context.store ? this.context.store.disaptch : this.props.dispatch
     if (!result) {
       throw new Error(
@@ -25,10 +25,10 @@ export class RNSComponent<T = {}> extends React.Component<RNSComponentProps<T>> 
     return result
   }
 
-  componentWillReceiveProps<T>(nextProps: Readonly<RNSComponentProps<T>>) {
+  componentWillReceiveProps<T>(nextProps: Readonly<NotifyComponentProps<T>>) {
     const { notifications } = nextProps
     const notificationIds = notifications.map(notification => notification.uid)
-    const systemNotifications = this.system().state.notifications || []
+    const systemNotifications = this.system().state.notifications
 
     if (notifications.length > 0) {
       // Get all active notifications from react-notification-system
@@ -45,7 +45,7 @@ export class RNSComponent<T = {}> extends React.Component<RNSComponentProps<T>> 
           onRemove: () => {
             notification.onRemove && notification.onRemove()
             const dispatch = this.getDispatch()
-            dispatch(new RNSHideAction(notification.uid))
+            dispatch(NotifyHide(notification.uid))
           }
         } as any)
       })
@@ -56,7 +56,7 @@ export class RNSComponent<T = {}> extends React.Component<RNSComponentProps<T>> 
     }
   }
 
-  shouldComponentUpdate<T>(nextProps: RNSComponentProps<T>) {
+  shouldComponentUpdate<T>(nextProps: NotifyComponentProps<T>) {
     return this.props !== nextProps
   }
 

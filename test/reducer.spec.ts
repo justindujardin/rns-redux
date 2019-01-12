@@ -1,13 +1,13 @@
-import { RNSReducer, RNSHideAction, RNSSuccessAction, RNSClearAction } from './../src'
+import { NotifyReducer, NotifyHide, NotifySuccess, NotifyClear } from './../src'
 
 describe('reducer', () => {
   it('initializes state with an array', () => {
-    expect(RNSReducer()).toEqual([])
+    expect(NotifyReducer()).toEqual([])
   })
 
   it('stores the notification to state', () => {
-    const action = new RNSSuccessAction({})
-    const state = RNSReducer([], action)
+    const action = NotifySuccess({})
+    const state = NotifyReducer([], action)
 
     expect(state.length).toBe(1)
   })
@@ -15,17 +15,17 @@ describe('reducer', () => {
   it('stores and removes notification', () => {
     const uid = 1
 
-    const state = RNSReducer([], new RNSSuccessAction({ uid }))
+    const state = NotifyReducer([], NotifySuccess({ uid }))
     expect(state.length).toBe(1)
 
-    const newState = RNSReducer(state, new RNSHideAction(uid))
+    const newState = NotifyReducer(state, NotifyHide(uid))
     expect(newState.length).toBe(0)
   })
 
   it('removes all notifications', () => {
-    const state = RNSReducer([], new RNSSuccessAction({ uid: 1 }))
-    const newState = RNSReducer(state, new RNSSuccessAction({ uid: 2 }))
-    const emptyState = RNSReducer(newState, new RNSClearAction())
+    const state = NotifyReducer([], NotifySuccess({ uid: 1 }))
+    const newState = NotifyReducer(state, NotifySuccess({ uid: 2 }))
+    const emptyState = NotifyReducer(newState, NotifyClear())
     expect(newState.length).toBe(2)
     expect(emptyState.length).toBe(0)
   })
