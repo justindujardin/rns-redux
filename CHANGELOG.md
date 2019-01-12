@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/justindujardin/rns-redux/compare/v2.0.0...v2.0.1) (2019-01-12)
+
+
+### Bug Fixes
+
+* exclude react and friends from our output bundles ([7bafb9e](https://github.com/justindujardin/rns-redux/commit/7bafb9e))
+
 # [2.0.0](https://github.com/justindujardin/rns-redux/compare/v1.0.3...v2.0.0) (2019-01-12)
 
 
