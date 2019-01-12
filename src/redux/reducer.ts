@@ -1,5 +1,5 @@
 import { NotifyShowType, NotifyHideType, NotifyClearType, NotifyActionTypes } from './actions'
-import { exhaustiveCheck, NotifyOpts } from './util'
+import { exhaustiveCheck, NotifyOpts } from '../util'
 
 export type NotifyState = NotifyOpts[]
 

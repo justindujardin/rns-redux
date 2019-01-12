@@ -2,7 +2,7 @@ import React from 'react'
 import ReactNotificationSystem, { System } from 'react-notification-system'
 import { Dispatch, Action } from 'redux'
 import { NotifyOpts } from './util'
-import { NotifyHide, NotifyActionTypes } from './actions'
+import { NotifyHide, NotifyActionTypes } from './redux/actions'
 
 export interface NotifyComponentProps<T = any> {
   notifications: NotifyOpts[]

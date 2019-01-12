@@ -1,4 +1,4 @@
-import { NotifyOpts, NotifyLevel } from './util'
+import { NotifyOpts, NotifyLevel } from '../util'
 import { Action } from 'redux'
 
 /**
