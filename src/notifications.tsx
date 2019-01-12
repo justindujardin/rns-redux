@@ -34,7 +34,7 @@ export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProp
       // Get all active notifications from react-notification-system
       /// and remove all where uid is not found in the reducer
       systemNotifications.forEach(notification => {
-        if (notificationIds.indexOf(notification.uid) < 0) {
+        if (notification.uid && notificationIds.indexOf(notification.uid) === -1) {
           this.system().removeNotification(notification.uid as string)
         }
       })
