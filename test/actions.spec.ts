@@ -1,23 +1,23 @@
-import { RNSSuccessAction, RNSErrorAction, RNSInfoAction, RNSWarningAction } from '../src'
+import { NotifySuccess, NotifyError, NotifyInfo, NotifyWarning } from '../src'
 
 describe('redux actions', () => {
   it('should set the correct notification level when using convenience class actions', () => {
-    expect(new RNSSuccessAction({}).payload.level).toEqual('success')
-    expect(new RNSWarningAction({}).payload.level).toEqual('warning')
-    expect(new RNSInfoAction({}).payload.level).toEqual('info')
-    expect(new RNSErrorAction({}).payload.level).toEqual('error')
+    expect(NotifySuccess({}).payload.level).toEqual('success')
+    expect(NotifyWarning({}).payload.level).toEqual('warning')
+    expect(NotifyInfo({}).payload.level).toEqual('info')
+    expect(NotifyError({}).payload.level).toEqual('error')
   })
 
   it('accepts custom opts', () => {
-    expect(new RNSSuccessAction({ data: { custom: true } }).payload.data.custom).toBe(true)
+    expect(NotifySuccess({ data: { custom: true } }).payload.data.custom).toBe(true)
   })
 
   it('generates random uid when not provided', () => {
-    expect(new RNSSuccessAction({}).payload.uid).toBeDefined()
-    expect(new RNSSuccessAction({}).payload.uid).not.toBeFalsy()
+    expect(NotifySuccess({}).payload.uid).toBeDefined()
+    expect(NotifySuccess({}).payload.uid).not.toBeFalsy()
   })
 
   it('sets the custom uid when provided', () => {
-    expect(new RNSSuccessAction({ uid: 1 }).payload.uid).toEqual(1)
+    expect(NotifySuccess({ uid: 1 }).payload.uid).toEqual(1)
   })
 })

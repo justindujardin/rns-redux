@@ -1,7 +1,7 @@
 import './fixture'
 import React from 'react'
 import sinon from 'sinon'
-import { RNSComponent, RNSReducer } from '../src'
+import { NotifyReducer, NotifyComponent, NotifyOpts } from '../src'
 import NotifySystem from 'react-notification-system'
 import { mount } from 'enzyme'
 
@@ -13,8 +13,8 @@ function timeout(ms: number): Promise<void> {
   })
 }
 
-describe('NotificationsComponent', () => {
-  const notification = {
+describe('NotifyComponent HTML', () => {
+  const notification: Partial<NotifyOpts> = {
     title: "Hey, it's good to see you!",
     message: 'Now you can see how easy it is to use notifications in React!',
     dismissible: false,
@@ -28,7 +28,7 @@ describe('NotificationsComponent', () => {
       dispatch: () => undefined
     }
     const mixins: any = noDispatch ? { ...props } : { ...defaults, ...props }
-    return mount(<RNSComponent notifications={[]} {...mixins} />, {
+    return mount(<NotifyComponent notifications={[]} {...mixins} />, {
       attachTo: window.document.getElementById('root')
     })
   }
@@ -44,8 +44,14 @@ describe('NotificationsComponent', () => {
     }
   })
 
+  describe('getDispatch', () => {
+    it('throws if not valid dispatch is found', () => {
+      const component = mountComponent({}, true).instance() as NotifyComponent
+      expect(() => component.getDispatch()).toThrow()
+    })
+  })
   it('exports the reducer', () => {
-    expect(RNSReducer).toBeDefined()
+    expect(NotifyReducer).toBeDefined()
   })
 
   it('should render one <NotifySystem /> component', () => {
@@ -55,13 +61,12 @@ describe('NotificationsComponent', () => {
 
   it('should render a single notification', () => {
     const wrapper = mountComponent()
-
     wrapper.setProps({
       notifications: [notification]
     })
 
-    expect(wrapper.html().indexOf(notification.title)).not.toBe(-1)
-    expect(wrapper.html().indexOf(notification.message)).not.toBe(-1)
+    expect(wrapper.html()).toContain(`${notification.title}`)
+    expect(wrapper.html()).toContain(`${notification.message}`)
   })
 
   it('should not add notification if it already exists based on the uid', () => {
@@ -131,6 +136,35 @@ describe('NotificationsComponent', () => {
     await timeout(50)
     expect(onCallback.called).toBe(true)
     expect(onRemove.called).toBe(true)
+  })
+
+  it('overwrites notifications when given new props', async () => {
+    const wrapper = mountComponent()
+    // Show a notification
+    wrapper.setProps({ notifications: [{ ...notification }] })
+    const one = wrapper.props().notifications
+    await timeout(1)
+    // Set a new notification list that's empty
+    wrapper.setProps({ notifications: [] })
+    const another = wrapper.props().notifications
+    await timeout(1)
+    expect(one).not.toEqual(another)
+  })
+
+  it('prunes rns notifications that do not exist in reducer state', async () => {
+    const wrapper = mountComponent()
+
+    const component = wrapper.instance() as NotifyComponent
+    const rns = component.system()
+    // TODO: use the underlying rns types?
+    rns.addNotification({ ...notification, uid: '3' } as any)
+    rns.addNotification({ ...notification } as any)
+    // Show a notification
+    wrapper.setProps({ notifications: [{ ...notification }] })
+    const one = wrapper.props().notifications
+    await timeout(1)
+    // The rns notification was remove and only the notification we're showing
+    expect(one.length).toBe(1)
   })
 
   it('calls onRemove once the notification is auto dismissed while style is false', async () => {

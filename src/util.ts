@@ -1,12 +1,13 @@
-export type RNSLevel = 'success' | 'warning' | 'error' | 'info'
+export type NotifyLevel = 'success' | 'warning' | 'error' | 'info'
 
-export interface RNSOpts {
-  uid?: string | number
-  level?: RNSLevel
-  title?: string
+export interface NotifyOpts {
+  uid: string | number
+  level?: NotifyLevel
+  title: string
   message: string
   position: string
   autoDismiss: number
+  dismissible?: boolean
   action: {
     label: string
     callback: () => void
