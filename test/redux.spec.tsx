@@ -2,10 +2,9 @@ import { timeout } from './fixture'
 import React from 'react'
 import sinon from 'sinon'
 import { NotifyReducer, NotifyRedux, NotifyOpts } from '../src'
-import NotifySystem from 'react-notification-system'
 import { mount } from 'enzyme'
 
-describe('NotifyRedux HTML', () => {
+describe('NotifyRedux', () => {
   const notification: Partial<NotifyOpts> = {
     title: "Hey, it's good to see you!",
     message: 'Now you can see how easy it is to use notifications in React!',
@@ -46,9 +45,9 @@ describe('NotifyRedux HTML', () => {
     expect(NotifyReducer).toBeDefined()
   })
 
-  it('should render one <NotifySystem /> component', () => {
+  it('should render one <NotifyRedux /> component', () => {
     const wrapper = mountComponent()
-    expect(wrapper.find(NotifySystem).length).toBe(1)
+    expect(wrapper.find(NotifyRedux).length).toBe(1)
   })
 
   it('should render a single notification', () => {

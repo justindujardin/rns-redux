@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactNotificationSystem, { System } from 'react-notification-system'
+import { NotifyPortal } from './portal'
 import { Dispatch, Action } from 'redux'
 import { NotifyOpts } from '../types'
 import { NotifyHide, NotifyActionTypes } from '../model/actions'
@@ -17,7 +17,7 @@ export interface NotifyReduxProps<T = any> {
  */
 export class NotifyRedux<T = {}> extends React.Component<NotifyReduxProps<T>> {
   notify: React.RefObject<any> = React.createRef()
-  system(): System {
+  system(): NotifyPortal {
     return this.notify.current
   }
 
@@ -70,6 +70,6 @@ export class NotifyRedux<T = {}> extends React.Component<NotifyReduxProps<T>> {
 
   render() {
     const { notifications, ...rest } = this.props
-    return <ReactNotificationSystem ref={this.notify} {...rest} />
+    return <NotifyPortal ref={this.notify} {...rest} />
   }
 }

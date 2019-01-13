@@ -1,5 +1,4 @@
 import { NotifyOpts, NotifyLevel } from '../types'
-import { Action } from 'redux'
 
 /**
  * REALLY lame unique id generation for notifications that don't provide
@@ -11,7 +10,7 @@ let uidCounter = 0
 /** String literal type used for show notification action "type" */
 export const NotifyShowType = '@showNotification'
 /** Redux action object for showing a notification */
-export interface INotifyShow extends Action {
+export interface INotifyShow {
   readonly type: '@showNotification'
   readonly payload: Partial<NotifyOpts>
 }
@@ -31,7 +30,7 @@ export function NotifyShow(payload: Partial<NotifyOpts>, level: NotifyLevel): IN
 /** String literal type constant for hide notification action "type" member */
 export const NotifyHideType = '@hideNotification'
 /** Redux action object shape for hiding a notification */
-export interface INotifyHide extends Action {
+export interface INotifyHide {
   readonly payload: number | string
   readonly type: '@hideNotification'
 }
@@ -48,7 +47,7 @@ export function NotifyHide(uid: number | string): INotifyHide {
 /** String literal type constant for clear notifications action "type" member */
 export const NotifyClearType = '@clearNotifications'
 /** Redux action object shape for clearing all notifications */
-export interface INotifyClear extends Action {
+export interface INotifyClear {
   readonly type: '@clearNotifications'
 }
 /**

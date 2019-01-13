@@ -59,20 +59,6 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
       byElement: this.byElement
     }
   }
-  // constructor() {
-  //   super()
-  //   // this.setOverrideStyle = this.setOverrideStyle.bind(this)
-  //   this.wrapper = this.wrapper.bind(this)
-  //   this.container = this.container.bind(this)
-  //   this.byElement = this.byElement.bind(this)
-  //   this._didNotificationRemoved = this._didNotificationRemoved.bind(this)
-  //   this.addNotification = this.addNotification.bind(this)
-  //   this.getNotificationRef = this.getNotificationRef.bind(this)
-  //   this.removeNotification = this.removeNotification.bind(this)
-  //   this.editNotification = this.editNotification.bind(this)
-  //   this.clearNotifications = this.clearNotifications.bind(this)
-  //   this._getStyles =
-  // }
 
   componentDidMount() {
     this.setOverrideStyle(this.props.style)
@@ -219,7 +205,8 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
 
   getNotificationRef = (notificationOrUID: NotifyOpts | number): NotifyItem | null => {
     let foundNotification: React.Component<NotifyItem> | null = null
-    const uid = typeof notificationOrUID === 'number' ? notificationOrUID : notificationOrUID.uid
+    const notification = notificationOrUID as NotifyOpts
+    const uid = notification.uid ? notification.uid : notificationOrUID
 
     Object.keys(this.refs).forEach(container => {
       if (container.indexOf('container') > -1) {
@@ -253,7 +240,8 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
     let foundNotification: NotifyOpts | null = null
     // NOTE: Find state notification to update by using
     // `setState` and forcing React to re-render the component.
-    const uid = typeof notificationOrUID === 'number' ? notificationOrUID : notificationOrUID.uid
+    const notification = notificationOrUID as NotifyOpts
+    const uid = notification.uid ? notification.uid : notificationOrUID
 
     const newNotifications = this.state.notifications.filter(function(stateNotification) {
       if (uid === stateNotification.uid) {
