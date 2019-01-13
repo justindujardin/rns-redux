@@ -1,15 +1,21 @@
 import React from 'react'
 import ReactNotificationSystem, { System } from 'react-notification-system'
 import { Dispatch, Action } from 'redux'
-import { NotifyOpts } from './util'
-import { NotifyHide, NotifyActionTypes } from './redux/actions'
+import { NotifyOpts } from '../types'
+import { NotifyHide, NotifyActionTypes } from '../model/actions'
 
-export interface NotifyComponentProps<T = any> {
+export interface NotifyReduxProps<T = any> {
   notifications: NotifyOpts[]
   dispatch?: Dispatch<Action<T>>
 }
 
-export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProps<T>> {
+/**
+ * A redux dispatch aware wrapper for Notifications.
+ *
+ * @deprecated Continue to use this if you need Redux, but it's functionality will be
+ * taken over by the base NotifyPortal with a custom dispatcher prop.
+ */
+export class NotifyRedux<T = {}> extends React.Component<NotifyReduxProps<T>> {
   notify: React.RefObject<any> = React.createRef()
   system(): System {
     return this.notify.current
@@ -25,7 +31,7 @@ export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProp
     return result
   }
 
-  componentWillReceiveProps<T>(nextProps: Readonly<NotifyComponentProps<T>>) {
+  componentWillReceiveProps<T>(nextProps: Readonly<NotifyReduxProps<T>>) {
     const { notifications } = nextProps
     const notificationIds = notifications.map(notification => notification.uid)
     const systemNotifications = this.system().state.notifications
@@ -35,7 +41,7 @@ export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProp
       /// and remove all where uid is not found in the reducer
       systemNotifications.forEach(notification => {
         if (notification.uid && notificationIds.indexOf(notification.uid) === -1) {
-          this.system().removeNotification(notification.uid as string)
+          this.system().removeNotification(notification.uid)
         }
       })
 
@@ -43,7 +49,9 @@ export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProp
         this.system().addNotification({
           ...notification,
           onRemove: () => {
-            notification.onRemove && notification.onRemove()
+            if (notification.onRemove) {
+              notification.onRemove(notification as any)
+            }
             const dispatch = this.getDispatch()
             dispatch(NotifyHide(notification.uid))
           }
@@ -56,7 +64,7 @@ export class NotifyComponent<T = {}> extends React.Component<NotifyComponentProp
     }
   }
 
-  shouldComponentUpdate<T>(nextProps: NotifyComponentProps<T>) {
+  shouldComponentUpdate<T>(nextProps: NotifyReduxProps<T>) {
     return this.props !== nextProps
   }
 

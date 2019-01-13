@@ -1,25 +1,17 @@
-import './fixture'
+import { timeout } from './fixture'
 import React from 'react'
 import sinon from 'sinon'
-import { NotifyReducer, NotifyComponent, NotifyOpts } from '../src'
+import { NotifyReducer, NotifyRedux, NotifyOpts } from '../src'
 import NotifySystem from 'react-notification-system'
 import { mount } from 'enzyme'
 
-function timeout(ms: number): Promise<void> {
-  return new Promise<void>(function promiseTimeout(resolve) {
-    setTimeout(() => {
-      resolve(undefined)
-    }, ms)
-  })
-}
-
-describe('NotifyComponent HTML', () => {
+describe('NotifyRedux HTML', () => {
   const notification: Partial<NotifyOpts> = {
     title: "Hey, it's good to see you!",
     message: 'Now you can see how easy it is to use notifications in React!',
     dismissible: false,
     level: 'info',
-    uid: 'demo-uid',
+    uid: 1337,
     autoDismiss: 5
   }
 
@@ -28,7 +20,7 @@ describe('NotifyComponent HTML', () => {
       dispatch: () => undefined
     }
     const mixins: any = noDispatch ? { ...props } : { ...defaults, ...props }
-    return mount(<NotifyComponent notifications={[]} {...mixins} />, {
+    return mount(<NotifyRedux notifications={[]} {...mixins} />, {
       attachTo: window.document.getElementById('root')
     })
   }
@@ -46,7 +38,7 @@ describe('NotifyComponent HTML', () => {
 
   describe('getDispatch', () => {
     it('throws if not valid dispatch is found', () => {
-      const component = mountComponent({}, true).instance() as NotifyComponent
+      const component = mountComponent({}, true).instance() as NotifyRedux
       expect(() => component.getDispatch()).toThrow()
     })
   })
@@ -154,7 +146,7 @@ describe('NotifyComponent HTML', () => {
   it('prunes rns notifications that do not exist in reducer state', async () => {
     const wrapper = mountComponent()
 
-    const component = wrapper.instance() as NotifyComponent
+    const component = wrapper.instance() as NotifyRedux
     const rns = component.system()
     // TODO: use the underlying rns types?
     rns.addNotification({ ...notification, uid: '3' } as any)

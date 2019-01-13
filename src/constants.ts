@@ -1,5 +1,10 @@
-var CONSTANTS = {
+import { NotifyOpts } from './types'
 
+export interface IConstants {
+  notification: NotifyOpts
+  [key: string]: any
+}
+export const CONSTANTS: IConstants = {
   // Positions
   positions: {
     tl: 'tl',
@@ -20,15 +25,12 @@ var CONSTANTS = {
 
   // Notification defaults
   notification: {
-    title: null,
-    message: null,
-    level: null,
+    uid: -1,
+    title: '',
+    message: '',
     position: 'tr',
     autoDismiss: 5,
     dismissible: 'both',
-    action: null
+    action: undefined
   }
-};
-
-
-module.exports = CONSTANTS;
+}

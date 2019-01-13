@@ -1,6 +1,6 @@
 // Used for calculations
-var defaultWidth = 320;
-var defaultColors = {
+export const defaultWidth = 320
+export const defaultColors = {
   success: {
     rgb: '94, 164, 0',
     hex: '#5ea400'
@@ -17,11 +17,10 @@ var defaultColors = {
     rgb: '54, 156, 199',
     hex: '#369cc7'
   }
-};
-var defaultShadowOpacity = '0.9';
+}
+export const defaultShadowOpacity = '0.9'
 
-var STYLES = {
-
+export const STYLES: any = {
   Wrapper: {},
   Containers: {
     DefaultStyle: {
@@ -79,7 +78,6 @@ var STYLES = {
       left: '50%',
       marginLeft: -(defaultWidth / 2)
     }
-
   },
 
   NotificationItem: {
@@ -114,7 +112,8 @@ var STYLES = {
       borderTop: '2px solid ' + defaultColors.success.hex,
       backgroundColor: '#f0f5ea',
       color: '#4b583a',
-      WebkitBoxShadow: '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')',
+      WebkitBoxShadow:
+        '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')',
       MozBoxShadow: '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')',
       boxShadow: '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')'
     },
@@ -132,7 +131,8 @@ var STYLES = {
       borderTop: '2px solid ' + defaultColors.warning.hex,
       backgroundColor: '#f9f6f0',
       color: '#5a5343',
-      WebkitBoxShadow: '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')',
+      WebkitBoxShadow:
+        '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')',
       MozBoxShadow: '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')',
       boxShadow: '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')'
     },
@@ -170,7 +170,6 @@ var STYLES = {
     info: {
       color: defaultColors.info.hex
     }
-
   },
 
   MessageWrapper: {
@@ -256,6 +255,4 @@ var STYLES = {
       padding: 0
     }
   }
-};
-
-module.exports = STYLES;
+}

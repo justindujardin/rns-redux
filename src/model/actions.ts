@@ -1,4 +1,4 @@
-import { NotifyOpts, NotifyLevel } from '../util'
+import { NotifyOpts, NotifyLevel } from '../types'
 import { Action } from 'redux'
 
 /**
@@ -24,7 +24,7 @@ export function NotifyShow(payload: Partial<NotifyOpts>, level: NotifyLevel): IN
       // The level is set by the caller
       level,
       // Add a UID if none is present
-      uid: payload.uid || `notify_${++uidCounter}`
+      uid: payload.uid || ++uidCounter
     }
   }
 }

@@ -30,3 +30,18 @@ global.cancelAnimationFrame = function(id) {
 }
 copyProps(window, global)
 configure({ adapter: new Adapter() })
+//
+// ------- End fake environment set up.
+//
+
+/**
+ * Wait the given number of milliseconds and resolve a promise
+ * @param ms the milliseconds to wait before resolving
+ */
+export function timeout(ms: number): Promise<void> {
+  return new Promise<void>(function promiseTimeout(resolve) {
+    setTimeout(() => {
+      resolve(undefined)
+    }, ms)
+  })
+}

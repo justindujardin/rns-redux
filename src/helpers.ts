@@ -1,26 +1,36 @@
-var Helpers = {
-  Timer: function(callback, delay) {
-    var timerId;
-    var start;
-    var remaining = delay;
-
-    this.pause = function() {
-      clearTimeout(timerId);
-      remaining -= new Date() - start;
-    };
-
-    this.resume = function() {
-      start = new Date();
-      clearTimeout(timerId);
-      timerId = setTimeout(callback, remaining);
-    };
-
-    this.clear = function() {
-      clearTimeout(timerId);
-    };
-
-    this.resume();
+export class Timer {
+  start = 0
+  remaining = 0
+  timerId: any = 0
+  constructor(private callback: () => any, public delay: number) {
+    this.remaining = delay
+    this.resume()
   }
-};
+  pause = () => {
+    clearTimeout(this.timerId)
+    this.remaining -= new Date().getTime() - this.start
+  }
 
-module.exports = Helpers;
+  resume = () => {
+    this.start = new Date().getTime()
+    clearTimeout(this.timerId)
+    this.timerId = setTimeout(this.callback, this.remaining)
+  }
+
+  clear = () => {
+    clearTimeout(this.timerId)
+  }
+}
+
+/* istanbul ignore next */
+/**
+ * This exploits Typescript's control flow analysis to do exhaustive pattern
+ * matching on switch statements that have tagged union types being switched
+ * on.
+ *
+ * This is useful for prevent access errors and ensuring all cases are considered
+ * when adding new features.
+ */
+export function exhaustiveCheck(_action: never) {
+  // MAGIC!
+}
