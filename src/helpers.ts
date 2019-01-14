@@ -34,3 +34,14 @@ export class Timer {
 export function exhaustiveCheck(_action: never) {
   // MAGIC!
 }
+
+/**
+ * Throw an error if an expression is false
+ * @param expression The expression to check for truthiness
+ * @param message The message to show as an error if the expression is not truthy
+ */
+export function invariant(expression: any, message: string) {
+  if (!expression) {
+    throw new Error(`Invariant failed: ${message}`)
+  }
+}

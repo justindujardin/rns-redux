@@ -44,6 +44,7 @@ export function NotifyHide(uid: number | string): INotifyHide {
     payload: uid
   }
 }
+
 /** String literal type constant for clear notifications action "type" member */
 export const NotifyClearType = '@clearNotifications'
 /** Redux action object shape for clearing all notifications */
@@ -56,6 +57,23 @@ export interface INotifyClear {
 export function NotifyClear(): INotifyClear {
   return {
     type: NotifyClearType
+  }
+}
+
+/** String literal type constant for edit notification action "type" member */
+export const NotifyEditType = '@editNotification'
+/** Redux action object shape for edits to a notification */
+export interface INotifyEdit {
+  readonly type: '@editNotification'
+  readonly payload: Partial<NotifyOpts>
+}
+/**
+ * Generate a redux {@see Action} object that clear all notifications when dispatched
+ */
+export function NotifyEdit(changes: Partial<NotifyOpts>): INotifyEdit {
+  return {
+    type: NotifyEditType,
+    payload: changes
   }
 }
 
@@ -92,4 +110,4 @@ export function NotifyInfo(payload: Partial<NotifyOpts>) {
  * Tagged union types (note the convenience functions that set levels are not
  * here because they share an action type with IShowNotification)
  */
-export type NotifyActionTypes = INotifyShow | INotifyHide | INotifyClear
+export type NotifyActionTypes = INotifyShow | INotifyHide | INotifyEdit | INotifyClear
