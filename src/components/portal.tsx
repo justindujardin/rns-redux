@@ -1,15 +1,24 @@
-import React from 'react'
+import React, { ComponentProps, ComponentPropsWithRef } from 'react'
 import PropTypes from 'prop-types'
 import { STYLES } from '../styles'
-import { NotifyOpts, NotifyStyle } from '../types'
+import { NotifyOpts, NotifyStyle, NotifyState, NotifyDispatch } from '../types'
 import { CONSTANTS } from '../constants'
 import { NotifyItem } from './item'
 import { NotifyContainer } from './container'
+import { getInitialNotifyState } from '../model/reducer'
 
 export interface NotifyPortalProps {
+  className?: string
   noAnimation?: boolean
   allowHTML?: boolean
   style: NotifyStyle
+  state?: NotifyState
+  /**
+   * A custom dispatch function can be specified in order to integrate with
+   * frameworks like Redux. If no dispatcher is specified, the state will
+   * be updated using the react `useReducer` hook.
+   */
+  dispatch?: NotifyDispatch
 }
 
 export interface NotifyPortalState {
@@ -30,11 +39,8 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
   static defaultProps = {
     style: {},
     noAnimation: false,
-    allowHTML: false
-  }
-
-  state: NotifyPortalState = {
-    notifications: []
+    allowHTML: false,
+    state: getInitialNotifyState()
   }
   public uid = 3400
   private _isMounted = false
@@ -120,7 +126,7 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
     }
   }
 
-  _didNotificationRemoved = (uid: number) => {
+  onRemoveComplete = (uid: number) => {
     let notification: NotifyOpts | undefined
     let notifications: NotifyOpts[] = this.state.notifications.filter((toCheck: NotifyOpts) => {
       if (toCheck.uid === uid) {
@@ -276,18 +282,22 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
 
   render() {
     let containers = null
+    const { className, allowHTML, noAnimation, children, style, ...passThrough } = this.props
     const notifications = this.state.notifications
 
     if (notifications.length) {
+      // Loop over each position (e.g. "tr" for top-right, "bl" for bottom-left)
       containers = Object.keys(CONSTANTS.positions).map(position => {
+        // Filter just the notifications with that position
         const _notifications = notifications.filter(notification => {
           return position === notification.position
         })
 
+        // If there are none, skip it.
         if (!_notifications.length) {
           return null
         }
-
+        // emit a container
         return (
           <NotifyContainer
             ref={'container-' + position}
@@ -295,16 +305,16 @@ export class NotifyPortal extends React.Component<NotifyPortalProps, NotifyPorta
             position={position}
             notifications={_notifications}
             getStyles={this._getStyles}
-            onRemove={this._didNotificationRemoved}
-            noAnimation={this.props.noAnimation}
-            allowHTML={this.props.allowHTML}
+            onRemove={this.onRemoveComplete}
+            noAnimation={noAnimation}
+            allowHTML={allowHTML}
           />
         )
       })
     }
 
     return (
-      <div className="notifications-wrapper" style={this.wrapper()}>
+      <div {...passThrough} data-testid={className} style={this.wrapper()}>
         {containers}
       </div>
     )

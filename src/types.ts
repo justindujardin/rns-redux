@@ -23,6 +23,7 @@ export interface NotifyOpts {
   children?: React.ReactNode
   onAdd?: NotifyCallback
   onRemove?: NotifyCallback
+  hidden?: boolean
   uid: number
   data?: any
 }
@@ -63,4 +64,12 @@ export interface NotifyStyle {
   Dismiss?: NotifyItemStyle
   Action?: NotifyItemStyle
   ActionWrapper?: NotifyWrapperStyle
+}
+
+export interface NotifyDispatch {
+  <T>(action: T): T
+}
+
+export interface NotifyState {
+  notifications: NotifyOpts[]
 }

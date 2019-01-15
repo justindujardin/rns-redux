@@ -21,9 +21,10 @@ export interface NotifyItemState {
 }
 
 export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState> {
+  static testId = 'notify-item'
   static defaultProps = {
     noAnimation: false,
-    onRemove: (...args: any[]) => args,
+    onRemove: null,
     allowHTML: false
   }
   static propTypes = {}
@@ -317,6 +318,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
 
     return (
       <div
+        data-testid={NotifyItem.testId}
         className={className}
         onClick={this._handleNotificationClick}
         onMouseEnter={this._handleMouseEnter}

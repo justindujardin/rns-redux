@@ -1,7 +1,6 @@
 export * from './components/portal'
 export * from './components/item'
 export * from './components/container'
-export * from './components/redux'
 export * from './model/actions'
 export * from './model/reducer'
 export * from './types'
