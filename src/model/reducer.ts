@@ -3,14 +3,12 @@ import {
   NotifyHideType,
   NotifyClearType,
   NotifyActionTypes,
-  NotifyEditType
+  NotifyEditType,
+  NotifyRemoveType,
+  NotifyHideAllType
 } from './actions'
-import { NotifyOpts } from '../types'
+import { NotifyOpts, NotifyState } from '../types'
 import { exhaustiveCheck, invariant } from '../helpers'
-
-export interface NotifyState {
-  notifications: NotifyOpts[]
-}
 
 /**
  * This is used for DRY and testing.
@@ -33,7 +31,15 @@ export function NotifyReducer(
       case NotifyHideType: {
         const { payload } = action
         return {
-          notifications: state.notifications.filter(n => n.uid !== payload)
+          notifications: state.notifications.map(n => {
+            if (n.uid === payload) {
+              return {
+                ...n,
+                hidden: true
+              }
+            }
+            return n
+          })
         }
       }
       case NotifyEditType: {
@@ -53,6 +59,22 @@ export function NotifyReducer(
       }
       case NotifyClearType: {
         return { notifications: [] }
+      }
+      case NotifyRemoveType: {
+        const { payload } = action
+        return {
+          notifications: state.notifications.filter(n => n.uid !== payload)
+        }
+      }
+      case NotifyHideAllType: {
+        return {
+          notifications: state.notifications.map(n => {
+            return {
+              ...n,
+              hidden: true
+            }
+          })
+        }
       }
       /* istanbul ignore next */
       default: {

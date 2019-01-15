@@ -15,7 +15,10 @@ export interface INotifyShow {
   readonly payload: Partial<NotifyOpts>
 }
 /** Show a notification with the given options and level */
-export function NotifyShow(payload: Partial<NotifyOpts>, level: NotifyLevel): INotifyShow {
+export function NotifyShow(payload: Partial<NotifyOpts>, level?: NotifyLevel): INotifyShow {
+  if (!level) {
+    level = payload.level
+  }
   return {
     type: NotifyShowType,
     payload: {
@@ -27,20 +30,54 @@ export function NotifyShow(payload: Partial<NotifyOpts>, level: NotifyLevel): IN
     }
   }
 }
+
 /** String literal type constant for hide notification action "type" member */
 export const NotifyHideType = '@hideNotification'
 /** Redux action object shape for hiding a notification */
 export interface INotifyHide {
-  readonly payload: number | string
+  readonly payload: number
   readonly type: '@hideNotification'
 }
 /**
- * Generate a redux {@see Action} object that hides any notification with
+ * Generate redux-compatible Action object that hides any notification with
  * the given id when dispatched
  */
-export function NotifyHide(uid: number | string): INotifyHide {
+export function NotifyHide(uid: number): INotifyHide {
   return {
     type: NotifyHideType,
+    payload: uid
+  }
+}
+
+/** String literal type constant for hide all notifications action "type" member */
+export const NotifyHideAllType = '@hideAllNotifications'
+/** Redux action object shape for hiding all notifications */
+export interface INotifyHideAll {
+  readonly type: '@hideAllNotifications'
+}
+/**
+ * Generate a redux-compatible Action object that hides all notifications when dispatched
+ */
+export function NotifyHideAll(): INotifyHideAll {
+  return {
+    type: NotifyHideAllType
+  }
+}
+
+/** String literal type constant for hide notification action "type" member */
+export const NotifyRemoveType = '@removeNotification'
+/** Redux action object shape for hiding a notification */
+export interface INotifyRemove {
+  readonly payload: number
+  readonly type: '@removeNotification'
+}
+/**
+ * Generate redux-compatible Action object that hides any notification with
+ * the given id when dispatched
+ */
+export function NotifyRemove(uid: number): INotifyRemove {
+  return {
+    type: NotifyRemoveType,
     payload: uid
   }
 }
@@ -52,7 +89,7 @@ export interface INotifyClear {
   readonly type: '@clearNotifications'
 }
 /**
- * Generate a redux {@see Action} object that clear all notifications when dispatched
+ * Generate redux-compatible Action object that clear all notifications when dispatched
  */
 export function NotifyClear(): INotifyClear {
   return {
@@ -68,7 +105,7 @@ export interface INotifyEdit {
   readonly payload: Partial<NotifyOpts>
 }
 /**
- * Generate a redux {@see Action} object that clear all notifications when dispatched
+ * Generate redux-compatible Action object that clear all notifications when dispatched
  */
 export function NotifyEdit(changes: Partial<NotifyOpts>): INotifyEdit {
   return {
@@ -78,28 +115,28 @@ export function NotifyEdit(changes: Partial<NotifyOpts>): INotifyEdit {
 }
 
 /**
- * Generate a redux {@see Action} object shows a notification with the "success"
+ * Generate redux-compatible Action object shows a notification with the "success"
  * styles applied when dispatched
  */
 export function NotifySuccess(payload: Partial<NotifyOpts>) {
   return NotifyShow(payload, 'success')
 }
 /**
- * Generate a redux {@see Action} object shows a notification with the "error"
+ * Generate redux-compatible Action object shows a notification with the "error"
  * styles applied when dispatched
  */
 export function NotifyError(payload: Partial<NotifyOpts>) {
   return NotifyShow(payload, 'error')
 }
 /**
- * Generate a redux {@see Action} object shows a notification with the "warning"
+ * Generate redux-compatible Action object shows a notification with the "warning"
  * styles applied when dispatched
  */
 export function NotifyWarning(payload: Partial<NotifyOpts>) {
   return NotifyShow(payload, 'warning')
 }
 /**
- * Generate a redux {@see Action} object shows a notification with the "info"
+ * Generate redux-compatible Action object shows a notification with the "info"
  * styles applied when dispatched
  */
 export function NotifyInfo(payload: Partial<NotifyOpts>) {
@@ -110,4 +147,10 @@ export function NotifyInfo(payload: Partial<NotifyOpts>) {
  * Tagged union types (note the convenience functions that set levels are not
  * here because they share an action type with IShowNotification)
  */
-export type NotifyActionTypes = INotifyShow | INotifyHide | INotifyEdit | INotifyClear
+export type NotifyActionTypes =
+  | INotifyShow
+  | INotifyHide
+  | INotifyHideAll
+  | INotifyRemove
+  | INotifyEdit
+  | INotifyClear
