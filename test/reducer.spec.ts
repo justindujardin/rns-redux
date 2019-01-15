@@ -17,8 +17,9 @@ function singleNotification(): NotifyState {
 }
 
 describe('reducer', () => {
-  it('initializes state with an array', () => {
-    expect(NotifyReducer()).toEqual({ notifications: [] })
+  it('initializes state with no notifications', () => {
+    const state = NotifyReducer()
+    expect(state.notifications.length).toBe(0)
   })
 
   describe('NotifyShow', () => {
@@ -26,6 +27,12 @@ describe('reducer', () => {
       const action = NotifySuccess({})
       const state = NotifyReducer(getInitialNotifyState(), action)
       expect(state.notifications.length).toBe(1)
+    })
+    it('throws and suggest using edit action if given an existing uid', () => {
+      const state = singleNotification()
+      expect(() => {
+        NotifyReducer(state, NotifySuccess({ uid: defaultId }))
+      }).toThrow(/Use NotifyEdit action/)
     })
   })
   describe('NotifyHide', () => {

@@ -25,8 +25,15 @@ export function NotifyReducer(
   if (action) {
     switch (action.type) {
       case NotifyShowType: {
-        const ops = action.payload as NotifyOpts
-        return { notifications: [...state.notifications, { ...ops }] }
+        const opts = action.payload as NotifyOpts
+        const found = state.notifications.find(n => n.uid === opts.uid)
+        invariant(
+          !found,
+          `Notification with uid(${
+            opts.uid
+          }) already exists. Use NotifyEdit action to edit existing notifications.`
+        )
+        return { notifications: [...state.notifications, { ...opts }] }
       }
       case NotifyHideType: {
         const { payload } = action

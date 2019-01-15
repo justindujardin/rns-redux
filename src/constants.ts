@@ -1,7 +1,16 @@
-import { NotifyOpts } from './types'
+import { NotifyOpts, NotifyPosition } from './types'
 
 export interface IConstants {
-  notification: NotifyOpts
+  notification: Partial<NotifyOpts>
+  testing: {
+    containerTestId: (position: NotifyPosition) => string
+    portalTestId: string
+    itemTestId: string
+    itemId: (id: number) => string
+  }
+  positions: {
+    [key: string]: NotifyPosition
+  }
   [key: string]: any
 }
 export const CONSTANTS: IConstants = {
@@ -25,7 +34,6 @@ export const CONSTANTS: IConstants = {
 
   // Notification defaults
   notification: {
-    uid: -1,
     title: '',
     message: '',
     position: 'tr',
@@ -33,5 +41,12 @@ export const CONSTANTS: IConstants = {
     dismissible: 'both',
     action: undefined,
     hidden: false
+  },
+
+  testing: {
+    containerTestId: (position: NotifyPosition) => `notify-container-${position}`,
+    portalTestId: 'notify-portal',
+    itemTestId: 'notify-item',
+    itemId: (id: number) => `notify-item-${id}`
   }
 }

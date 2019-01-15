@@ -15,8 +15,7 @@ describe('NotifyProvider Component', () => {
     render(<MissingProviderComponent />)
   })
   it('injects context for "useNotify" hook in children', () => {
-    const { notify } = testModelContext()
-    const { state, dispatch } = notify
+    const { state, dispatch } = testModelContext()
     let rendered = false
     function MyFunctionComponent() {
       const { state, dispatch } = useNotify()

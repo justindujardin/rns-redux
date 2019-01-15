@@ -1,6 +1,6 @@
 import { NotifyOpts, NotifyState, NotifyDispatch } from '../types'
 import { CONSTANTS } from '../constants'
-import { NotifyRemove, NotifyHide, NotifyShow, NotifyEdit, NotifyClear } from './actions'
+import { NotifyHide, NotifyShow, NotifyEdit, NotifyClear } from './actions'
 import { invariant } from '../helpers'
 
 export class NotifyAPI {
@@ -16,16 +16,8 @@ export class NotifyAPI {
     return notification
   }
 
-  onRemoveComplete(uid: number) {
-    const notification = this.findNotification(uid)
-    this.dispatch(NotifyRemove(uid))
-    if (notification && notification.onRemove) {
-      notification.onRemove(notification)
-    }
-  }
-
   addNotification(notification: Partial<NotifyOpts>) {
-    const draft: NotifyOpts = { ...CONSTANTS.notification, ...notification }
+    const draft = { ...CONSTANTS.notification, ...notification } as NotifyOpts
     const { notifications } = this.state
     if (!draft.level) {
       throw new Error('notification level is required.')

@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NotifyOpts } from '../types'
+import { NotifyOpts, NotifyPosition } from '../types'
 import { CONSTANTS } from '../constants'
 import { NotifyItem } from './item'
 
 export interface NotifyContainerProps {
-  position: string
+  position: NotifyPosition
   notifications: NotifyOpts[]
   getStyles?: any
   onRemove?: (uid: number) => void
@@ -29,7 +29,14 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
   }
 
   render() {
-    const { getStyles, onRemove, noAnimation = false, allowHTML = false, children } = this.props
+    const {
+      getStyles,
+      onRemove,
+      noAnimation = false,
+      allowHTML = false,
+      children,
+      position
+    } = this.props
     if (
       [CONSTANTS.positions.bl, CONSTANTS.positions.br, CONSTANTS.positions.bc].indexOf(
         this.props.position
@@ -41,7 +48,6 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
     const notifications = this.props.notifications.map(notification => {
       return (
         <NotifyItem
-          ref={'notification-' + notification.uid}
           key={`${notification.uid}`}
           notification={notification}
           getStyles={getStyles}
@@ -54,7 +60,7 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
     })
 
     return (
-      <div className={'notifications-' + this.props.position} style={this._style}>
+      <div data-testid={CONSTANTS.testing.containerTestId(position)} style={this._style}>
         {notifications}
       </div>
     )

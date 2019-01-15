@@ -68,6 +68,7 @@ export interface NotifyStyle {
 
 export interface NotifyDispatch {
   <T>(action: T): T
+  (action: any): any
 }
 
 export interface NotifyState {

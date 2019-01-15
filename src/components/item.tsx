@@ -6,6 +6,7 @@ import { CONSTANTS } from '../constants'
 import { Timer } from '../helpers'
 
 export interface NotifyItemProps {
+  id?: string
   key: string
   notification: NotifyOpts
   getStyles: any
@@ -21,7 +22,6 @@ export interface NotifyItemState {
 }
 
 export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState> {
-  static testId = 'notify-item'
   static defaultProps = {
     noAnimation: false,
     onRemove: null,
@@ -134,6 +134,8 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
 
   _removeNotification = () => {
     const { onRemove, notification } = this.props
+    // TODO: Make this work. It was in the portal as a weird callback side-effect.
+    // this.dispatch(NotifyRemove(uid))
     if (onRemove) {
       onRemove(notification ? notification.uid : -1)
     }
@@ -221,7 +223,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
 
   render() {
     let notification = this.props.notification
-    let className = 'notification notification-' + notification.level
+    let className = `notification notification-${notification.level} notify-item`
     let notificationStyle = { ...this._styles.notification }
     let cssByPos = this._getCssPropertyByPosition()
     let dismiss = null
@@ -318,7 +320,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
 
     return (
       <div
-        data-testid={NotifyItem.testId}
+        data-testid={CONSTANTS.testing.itemId(notification.uid)}
         className={className}
         onClick={this._handleNotificationClick}
         onMouseEnter={this._handleMouseEnter}

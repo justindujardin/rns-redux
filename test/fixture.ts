@@ -1,38 +1,8 @@
-/*! This creates a DOM for testing fully mounted headless components using JSDom and Enzyme. */
-import Adapter from 'enzyme-adapter-react-16'
-import { configure } from 'enzyme'
-const { JSDOM } = require('jsdom')
-const jsdom = new JSDOM('<!doctype html><html><body><div id="root"/></body></html>')
-const { window } = jsdom
-function copyProps(src: any, target: any) {
-  Object.defineProperties(target, {
-    // @ts-ignore
-    ...Object.getOwnPropertyDescriptors(src),
-    // @ts-ignore
-    ...Object.getOwnPropertyDescriptors(target)
-  })
-}
-// @ts-ignore
-global.window = window
-// @ts-ignore
-global.document = window.document
-// @ts-ignore
-global.navigator = {
-  userAgent: 'node.js'
-}
-// @ts-ignore
-global.requestAnimationFrame = function(callback) {
-  return setTimeout(callback, 0)
-}
-// @ts-ignore
-global.cancelAnimationFrame = function(id) {
-  clearTimeout(id)
-}
-copyProps(window, global)
-configure({ adapter: new Adapter() })
-//
-// ------- End fake environment set up.
-//
+import React from 'react'
+import { INotifyContext } from '../src/context'
+import { NotifyState, NotifyDispatch } from '../src/types'
+import { getInitialNotifyState, NotifyReducer } from '../src'
+import { createStore } from 'redux'
 
 /**
  * Wait the given number of milliseconds and resolve a promise
@@ -45,3 +15,17 @@ export function timeout(ms: number): Promise<void> {
     }, ms)
   })
 }
+
+export function makeStore(state: Partial<NotifyState> = getInitialNotifyState()) {
+  return createStore(NotifyReducer, state)
+}
+
+export function testModelContext(
+  initialState: Partial<NotifyState> = { notifications: [] }
+): INotifyContext {
+  const store = makeStore(initialState)
+  const state = getInitialNotifyState()
+  return { state, dispatch: store.dispatch }
+}
+
+export * from 'react-testing-library'

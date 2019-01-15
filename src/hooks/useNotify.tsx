@@ -1,8 +1,16 @@
 import { NotifyContext } from '../context'
-import { useContext, useState, useCallback, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { NotifyAPI } from '../model/api'
+import { NotifyState, NotifyDispatch } from '../types'
 
-export function useNotify() {
+export interface INotifyContext {
+  state: NotifyState
+  dispatch: NotifyDispatch
+  api: NotifyAPI
+}
+
+/** Return the notify API for use in components */
+export function useNotify(): INotifyContext {
   const context = useContext(NotifyContext)
   if (!context) {
     throw new Error(
@@ -10,14 +18,13 @@ export function useNotify() {
         'Try including <NotifyProvider/> near the root of your application'
     )
   }
-  const { notify } = context
-  const { state, dispatch } = notify
+  const { state, dispatch } = context
   const [instance, setInstance] = useState<NotifyAPI>(new NotifyAPI(state, dispatch))
   useEffect(
     function onContextChanged() {
       setInstance(new NotifyAPI(state, dispatch))
     },
-    [notify, state, dispatch]
+    [state, dispatch]
   )
   return {
     state,
