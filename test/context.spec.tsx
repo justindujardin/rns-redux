@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, cleanup } from 'react-testing-library'
-import { NotifyProvider } from '../src/context'
+import { NotifyProvider } from '../src/provider'
 import { useNotify } from '../src/hooks/useNotify'
 import { testModelContext } from './fixture'
 

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useState, RefObject, useRef } from 'react'
+import React, { useEffect, useState, RefObject, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { STYLES } from '../styles'
 import {

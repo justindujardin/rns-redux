@@ -1,20 +1,9 @@
-import React, { useEffect } from 'react'
-import {
-  render,
-  cleanup,
-  RenderResult,
-  flushEffects,
-  waitForDomChange,
-  fireEvent
-} from 'react-testing-library'
-import {
-  findRenderedDOMComponentWithClass,
-  scryRenderedDOMComponentsWithClass,
-  Simulate
-} from 'react-dom/test-utils'
-import { NotifyPortal, CONSTANTS, NotifyOpts, NotifyItem, NotifyPosition } from '../src'
+import React from 'react'
+import { render, cleanup, flushEffects, waitForDomChange, fireEvent } from 'react-testing-library'
+import { Simulate } from 'react-dom/test-utils'
+import { NotifyPortal, CONSTANTS, NotifyOpts, NotifyPosition } from '../src'
 import { useNotify, INotifyContext } from '../src/hooks/useNotify'
-import { NotifyProvider } from '../src/context'
+import { NotifyProvider } from '../src/provider'
 const { positions, levels } = CONSTANTS
 const defaultNotification: Partial<NotifyOpts> = {
   title: 'This is a title',
@@ -101,14 +90,14 @@ describe('NotifyAPI', () => {
 // describe('NotifyContainer', () => {})
 describe('NotifyItem', () => {
   xit('should remove a notification after autoDismiss', () => {
-    const { root, api } = renderNotifications([getNote({ uid: defaultId, autoDismiss: 2 })])
+    const { root } = renderNotifications([getNote({ uid: defaultId, autoDismiss: 2 })])
     jest.runTimersToTime(3000)
     flushEffects()
     expect(() => root.getByTestId(CONSTANTS.testing.itemId(defaultId))).toThrow()
   })
 
   xit('should dismiss notification on click', () => {
-    const { root, api } = renderNotifications([getNote(defaultId)])
+    const { root } = renderNotifications([getNote(defaultId)])
     const selector = CONSTANTS.testing.itemId(defaultId)
     let notification = root.getByTestId(selector)
     Simulate.click(notification)
@@ -130,7 +119,7 @@ describe('NotifyItem', () => {
   it('should not render title if not provided', () => {
     const notificationObj = getNote(defaultId)
     delete notificationObj.title
-    const { root, api } = renderNotifications([notificationObj])
+    const { root } = renderNotifications([notificationObj])
     const container = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
     expect(container).toBeTruthy()
     expect(container.querySelector('.notification-title')).toBeFalsy()
@@ -139,7 +128,7 @@ describe('NotifyItem', () => {
   it('should omit message elements for empty values', () => {
     const notificationObj = getNote(defaultId)
     delete notificationObj.message
-    const { root, api } = renderNotifications([notificationObj])
+    const { root } = renderNotifications([notificationObj])
     const container = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
     expect(container).toBeTruthy()
     expect(container.querySelector('.notification-message')).toBeFalsy()
@@ -265,7 +254,7 @@ describe('NotifyItem', () => {
 
 describe('NotifyPortal Component', () => {
   it('throws if used outside of NotifyProvider context', () => {
-    expect(() => render(<NotifyPortal />)).toThrow()
+    expect(() => render(<NotifyPortal />)).toThrow(/Try including <NotifyProvider\/>/)
   })
 
   it('should be rendered', () => {
