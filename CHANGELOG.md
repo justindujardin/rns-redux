@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/justindujardin/rns-redux/compare/v3.1.1...v3.2.0) (2019-01-16)
+
+
+### Features
+
+* **NotifyProvider:** add "withPortal" boolean prop ([0023bcc](https://github.com/justindujardin/rns-redux/commit/0023bcc))
+
 ## [3.1.1](https://github.com/justindujardin/rns-redux/compare/v3.1.0...v3.1.1) (2019-01-16)
 
 
