@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/justindujardin/rns-redux/compare/v3.0.0...v3.0.1) (2019-01-16)
+
+
+### Bug Fixes
+
+* trim dead code and fix changelog ([3e9ac14](https://github.com/justindujardin/rns-redux/commit/3e9ac14))
+
 # [3.0.0](https://github.com/justindujardin/rns-redux/compare/v2.0.2...v3.0.0) (2019-01-16)
 
 
