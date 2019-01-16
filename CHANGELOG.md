@@ -1,3 +1,11 @@
+## [3.2.2](https://github.com/justindujardin/rns-redux/compare/v3.2.1...v3.2.2) (2019-01-16)
+
+
+### Bug Fixes
+
+* **css:** render container classname based on position for styling ([5223de4](https://github.com/justindujardin/rns-redux/commit/5223de4))
+* change css classnames to notify-* ([1fb20a9](https://github.com/justindujardin/rns-redux/commit/1fb20a9))
+
 ## [3.2.1](https://github.com/justindujardin/rns-redux/compare/v3.2.0...v3.2.1) (2019-01-16)
 
 
