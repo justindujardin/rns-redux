@@ -96,25 +96,25 @@ describe('NotifyItem', () => {
     expect(() => root.getByTestId(CONSTANTS.testing.itemId(defaultId))).toThrow()
   })
 
-  xit('should dismiss notification on click', () => {
+  it('should dismiss notification on click', () => {
     const { root } = renderNotifications([getNote(defaultId)])
     const selector = CONSTANTS.testing.itemId(defaultId)
     let notification = root.getByTestId(selector)
-    Simulate.click(notification)
+    fireEvent.click(notification)
     waitForDomChange()
     flushEffects()
     expect(() => root.getByTestId(selector)).toThrow()
   })
 
-  // xit('should dismiss notification on click of dismiss button', () => {
-  //   const { root, api } = renderNotifications([getNote(defaultId)])
-  //   let notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
-  //   let dismissButton = findRenderedDOMComponentWithClass(instance, 'notification-dismiss')
-  //   Simulate.click(dismissButton)
-  //   jest.runTimersToTime(1000)
-  //   let notificationRemoved = scryRenderedDOMComponentsWithClass(instance, 'notification')
-  //   expect(notificationRemoved.length).toBe(0)
-  // })
+  it('should dismiss notification on click of dismiss button', () => {
+    const { root } = renderNotifications([getNote(defaultId)])
+    const selector = CONSTANTS.testing.itemId(defaultId)
+    let notification = root.getByTestId(selector)
+    let dismissButton = notification.querySelector('.notification-dismiss') as HTMLButtonElement
+    fireEvent.click(dismissButton)
+    flushEffects()
+    expect(() => root.getByTestId(selector)).toThrow()
+  })
 
   it('should not render title if not provided', () => {
     const notificationObj = getNote(defaultId)
@@ -138,7 +138,7 @@ describe('NotifyItem', () => {
     const note = getNote({ uid: defaultId, dismissible: false })
     const { root } = renderNotifications([note])
     let notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
-    Simulate.click(notification)
+    fireEvent.click(notification)
     expect(root.getByTestId(CONSTANTS.testing.itemId(defaultId))).toBeTruthy()
   })
 
@@ -146,7 +146,7 @@ describe('NotifyItem', () => {
     const note = getNote({ uid: defaultId, dismissible: 'none' })
     const { root } = renderNotifications([note])
     let notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
-    Simulate.click(notification)
+    fireEvent.click(notification)
     expect(root.getByTestId(CONSTANTS.testing.itemId(defaultId))).toBeTruthy()
   })
 
@@ -154,7 +154,7 @@ describe('NotifyItem', () => {
     const note = getNote({ uid: defaultId, dismissible: 'button' })
     const { root } = renderNotifications([note])
     let notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
-    Simulate.click(notification)
+    fireEvent.click(notification)
     expect(root.getByTestId(CONSTANTS.testing.itemId(defaultId))).toBeTruthy()
   })
 
@@ -207,11 +207,11 @@ describe('NotifyItem', () => {
     const { root } = renderNotifications([note])
     const testId = CONSTANTS.testing.itemId(defaultId)
     let notification = root.getByTestId(testId)
-    // Simulate.click(notification)
+    // fireEvent.click(notification)
     // notificationObj.autoDismiss = 2
     // component.addNotification(notificationObj)
     // let notification = findRenderedDOMComponentWithClass(instance, 'notification')
-    Simulate.mouseEnter(notification)
+    fireEvent.mouseEnter(notification)
     jest.runTimersToTime(1500)
     expect(root.getByTestId(testId)).not.toBeNull()
     done()
@@ -221,35 +221,36 @@ describe('NotifyItem', () => {
   //   notificationObj.autoDismiss = 2
   //   component.addNotification(notificationObj)
   //   let notification = findRenderedDOMComponentWithClass(instance, 'notification')
-  //   Simulate.mouseEnter(notification)
+  //   fireEvent.mouseEnter(notification)
   //   jest.runTimersToTime(800)
-  //   Simulate.mouseLeave(notification)
+  //   fireEvent.mouseLeave(notification)
   //   jest.runTimersToTime(2000)
   //   let _notification = scryRenderedDOMComponentsWithClass(instance, 'notification')
   //   expect(_notification.length).toBe(0)
   //   done()
   // })
 
-  // it('should allow HTML inside messages', done => {
-  //   defaultNotification.message = '<strong class="allow-html-strong">Strong</strong>'
-  //   component.addNotification(defaultNotification)
-  //   let notification = findRenderedDOMComponentWithClass(instance, 'notification-message')
-  //   let htmlElement = notification.getElementsByClassName('allow-html-strong')
-  //   expect(htmlElement.length).toBe(1)
-  //   done()
-  // })
+  it('should allow HTML inside messages', () => {
+    const note = getNote({
+      uid: defaultId,
+      message: '<strong class="allow-html-strong">Strong</strong>'
+    })
+    const { root } = renderNotifications([note])
+    const testId = CONSTANTS.testing.itemId(defaultId)
+    let notification = root.getByTestId(testId)
+    let htmlElement = notification.getElementsByClassName('allow-html-strong')
+    expect(htmlElement.length).toBe(1)
+  })
 
-  // it('should render containers with a overrided width', done => {
-  //   notificationObj.position = 'tc'
-  //   component.addNotification(notificationObj)
-  //   let notification = findRenderedDOMComponentWithClass(
-  //     instance,
-  //     'notifications-tc'
-  //   ) as HTMLElement
-  //   let width = notification.style.width
-  //   expect(width).toBe('600px')
-  //   done()
-  // })
+  it('should render containers with a overrided width', () => {
+    const note = getNote({
+      uid: defaultId,
+      position: 'tc'
+    })
+    const { root } = renderNotifications([note])
+    let notification = root.getByTestId(CONSTANTS.testing.containerTestId('tc')) as HTMLElement
+    expect(notification.style.width).toBe('600px')
+  })
 })
 
 describe('NotifyPortal Component', () => {
@@ -411,7 +412,6 @@ describe('NotifyPortal Component', () => {
     root.getByTestId(CONSTANTS.testing.itemId(2))
     root.getByTestId(CONSTANTS.testing.itemId(3))
     api.clearNotifications()
-    // jest.runTimersToTime(200)
     flushEffects()
 
     expect(() => root.getByTestId(CONSTANTS.testing.itemId(1))).toThrow()
@@ -419,7 +419,7 @@ describe('NotifyPortal Component', () => {
     expect(() => root.getByTestId(CONSTANTS.testing.itemId(3))).toThrow()
   })
 
-  xit('should accept an action without callback function defined', () => {
+  it('should accept an action without callback function defined', () => {
     const note = getNote({
       uid: defaultId,
       action: {
@@ -430,30 +430,32 @@ describe('NotifyPortal Component', () => {
     const notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
     let button = notification.querySelector('.notification-action-button') as HTMLButtonElement
     fireEvent.click(button)
+    flushEffects()
     expect(() => root.getByTestId(CONSTANTS.testing.itemId(defaultId))).toThrow()
   })
 
-  xit('should execute a callback function on remove a notification', () => {
+  it('should execute a callback function on remove a notification', () => {
     let removed = false
     const note = getNote({
       uid: defaultId,
-      onRemove: () => (removed = true)
+      onRemove: () => {
+        removed = true
+      }
     })
     const { root } = renderNotifications([note])
     const notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
-    Simulate.click(notification)
+    fireEvent.click(notification)
     flushEffects()
     expect(removed).toBe(true)
   })
 
-  // it('should render a notification with specific style based on position', done => {
-  //   notificationObj.position = 'bc'
-  //   component.addNotification(notificationObj)
-  //   let notification = findRenderedDOMComponentWithClass(instance, 'notification') as HTMLElement
-  //   let bottomPosition = notification.style.bottom
-  //   expect(bottomPosition).toBe('-100px')
-  //   done()
-  // })
+  xit('should render a notification with specific style based on position', () => {
+    const note = getNote({ position: 'bc' })
+    const { root } = renderNotifications([note])
+    let notification = root.getByTestId(CONSTANTS.testing.containerTestId('bc')) as HTMLElement
+    let bottomPosition = notification.style.bottom
+    expect(bottomPosition).toBe('-100px')
+  })
 
   // it('should render containers with a overrided width for a specific position', done => {
   //   notificationObj.position = 'tl'
@@ -473,23 +475,27 @@ describe('NotifyPortal Component', () => {
     expect(() => renderNotifications([note])).toThrow(/notification level is required/)
   })
 
-  // it('should throw an error if a invalid level is defined', done => {
-  //   notificationObj.level = 'invalid'
-  //   expect(() => component.addNotification(notificationObj)).toThrow(/is not a valid level/)
-  //   done()
-  // })
+  it('should throw an error if a invalid level is defined', () => {
+    const note = getNote({
+      uid: defaultId,
+      level: 'invalid' as any
+    })
+    expect(() => renderNotifications([note])).toThrow(/is not a valid level/)
+  })
 
-  // it('should throw an error if a invalid position is defined', done => {
-  //   notificationObj.position = 'invalid'
-  //   expect(() => component.addNotification(notificationObj)).toThrow(/is not a valid position/)
-  //   done()
-  // })
+  it('should throw an error if a invalid position is defined', () => {
+    const note = getNote({
+      uid: defaultId,
+      position: 'invalid' as any
+    })
+    expect(() => renderNotifications([note])).toThrow(/is not a valid position/)
+  })
 
-  // it('should throw an error if autoDismiss is not a number', done => {
-  //   notificationObj.autoDismiss = 'string'
-  //   expect(() => component.addNotification(notificationObj)).toThrow(
-  //     /\'autoDismiss\' must be a number./
-  //   )
-  //   done()
-  // })
+  it('should throw an error if autoDismiss is not a number', () => {
+    const note = getNote({
+      uid: defaultId,
+      autoDismiss: 'invalid' as any
+    })
+    expect(() => renderNotifications([note])).toThrow(/\'autoDismiss\' must be a number./)
+  })
 })

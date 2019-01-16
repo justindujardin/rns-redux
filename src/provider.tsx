@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment, useReducer } from 'react'
 import { NotifyPortal, NotifyPortalProps } from './components/portal'
 import { NotifyDispatch, NotifyState } from './types'
 import { getInitialNotifyState, NotifyReducer } from './model/reducer'
-import { INotifyContext, NotifyContext } from './context';
+import { INotifyContext, NotifyContext } from './context'
 
 export interface NotifyProviderProps extends Partial<NotifyPortalProps> {
   readonly state?: NotifyState

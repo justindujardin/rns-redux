@@ -136,7 +136,7 @@ export function NotifyPortal(props: NotifyPortalProps) {
       // emit a container
       return (
         <NotifyContainer
-          // ref={getRef('container-' + position)}
+          notify={api}
           key={position}
           position={position as NotifyPosition}
           notifications={_notifications}

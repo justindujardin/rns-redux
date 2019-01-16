@@ -1,6 +1,6 @@
 import { NotifyOpts, NotifyState, NotifyDispatch } from '../types'
 import { CONSTANTS } from '../constants'
-import { NotifyHide, NotifyShow, NotifyEdit, NotifyClear } from './actions'
+import { NotifyHide, NotifyShow, NotifyEdit, NotifyClear, NotifyRemove } from './actions'
 import { invariant } from '../helpers'
 
 export class NotifyAPI {
@@ -79,6 +79,21 @@ export class NotifyAPI {
     const notification = this.findNotification(uid)
     if (notification) {
       this.dispatch(NotifyHide(uid))
+      return true
+    }
+    return false
+  }
+  destroyNotification(uid: number): boolean {
+    const notification = this.findNotification(uid)
+    if (notification) {
+      this.dispatch(NotifyRemove(uid))
+      if (notification.onRemove) {
+        try {
+          notification.onRemove(notification)
+        } catch (e) {
+          console.warn('notification onRemove handler errored', e)
+        }
+      }
       return true
     }
     return false

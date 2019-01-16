@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { NotifyOpts, NotifyPosition } from '../types'
 import { CONSTANTS } from '../constants'
 import { NotifyItem } from './item'
+import { NotifyAPI } from '../model/api'
 
 export interface NotifyContainerProps {
   position: NotifyPosition
@@ -12,6 +13,7 @@ export interface NotifyContainerProps {
   noAnimation?: boolean
   allowHTML?: boolean
   children?: string | React.ReactNode
+  notify: NotifyAPI
 }
 
 export class NotifyContainer extends React.Component<NotifyContainerProps> {
@@ -35,6 +37,7 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
       noAnimation = false,
       allowHTML = false,
       children,
+      notify,
       position
     } = this.props
     if (
@@ -48,6 +51,7 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
     const notifications = this.props.notifications.map(notification => {
       return (
         <NotifyItem
+          notify={notify}
           key={`${notification.uid}`}
           notification={notification}
           getStyles={getStyles}

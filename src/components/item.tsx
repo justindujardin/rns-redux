@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { findDOMNode } from 'react-dom'
 import { NotifyOpts } from '../types'
 import { CONSTANTS } from '../constants'
-import { Timer } from '../helpers'
+import { Timer, invariant } from '../helpers'
+import { NotifyAPI } from '../model/api'
 
 export interface NotifyItemProps {
   id?: string
@@ -12,6 +13,7 @@ export interface NotifyItemProps {
   getStyles: any
   onRemove?: (uid: number) => void
   noAnimation: boolean
+  notify: NotifyAPI
   allowHTML: boolean
   children?: React.ReactNode | string
 }
@@ -133,9 +135,9 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
   }
 
   _removeNotification = () => {
-    const { onRemove, notification } = this.props
-    // TODO: Make this work. It was in the portal as a weird callback side-effect.
-    // this.dispatch(NotifyRemove(uid))
+    const { onRemove, notification, notify } = this.props
+    invariant(notify, "'notify' API must be passed to NotifyItem components explicitly")
+    notify.destroyNotification(notification.uid)
     if (onRemove) {
       onRemove(notification ? notification.uid : -1)
     }
