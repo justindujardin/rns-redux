@@ -1,5 +1,4 @@
 import { NotifyOpts, NotifyState, NotifyDispatch } from '../types'
-import { CONSTANTS } from '../constants'
 import { NotifyHide, NotifyShow, NotifyEdit, NotifyClear, NotifyRemove } from './actions'
 import { invariant } from '../helpers'
 
@@ -17,10 +16,6 @@ export class NotifyAPI {
   }
 
   addNotification(notification: Partial<NotifyOpts>): NotifyOpts {
-    // TODO: This should be an effect... probably on the NotifyProvider
-    if (typeof notification.onAdd === 'function') {
-      notification.onAdd(notification as NotifyOpts)
-    }
     this.dispatch(NotifyShow(notification))
     return notification as NotifyOpts
   }
@@ -37,10 +32,6 @@ export class NotifyAPI {
     const notification = this.findNotification(uid)
     if (notification) {
       this.dispatch(NotifyRemove(uid))
-      // TODO: This effect should exist on notify provider like other comment
-      if (notification.onRemove) {
-        notification.onRemove(notification)
-      }
       return true
     }
     return false

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment, useReducer } from 'react'
 import { NotifyPortal, NotifyPortalProps } from './components/portal'
-import { NotifyDispatch, NotifyState } from './types'
+import { NotifyDispatch, NotifyState, NotifyOpts } from './types'
 import { getInitialNotifyState, NotifyReducer } from './model/reducer'
 import { INotifyContext, NotifyContext } from './context'
 
@@ -29,12 +29,30 @@ export function NotifyProvider(props: NotifyProviderProps) {
     state,
     dispatch: dispatch || hooksDispatch
   })
+
   useEffect(
     function onContextSourceChanged() {
       const newState = customDispatch ? state : hooksState
       const newDispatch = props.dispatch ? props.dispatch : hooksDispatch
       if (contextProps && !shallowCompare(contextProps.state, state)) {
+        const nextNotes = newState.notifications
+        const prevNotes = contextProps.state.notifications
+        const nextNoteIds: number[] = newState.notifications.map(n => n.uid)
+        const prevNoteIds: number[] = contextProps.state.notifications.map(n => n.uid)
+        const addNotes = nextNotes.filter((n: NotifyOpts) => prevNoteIds.indexOf(n.uid) === -1)
+        const removeNotes = prevNotes.filter((n: NotifyOpts) => nextNoteIds.indexOf(n.uid) === -1)
         setContextProps({ state: newState, dispatch: newDispatch })
+        // Trigger notification lifecycles
+        addNotes.forEach((note: NotifyOpts) => {
+          if (note.onAdd) {
+            note.onAdd(note)
+          }
+        })
+        removeNotes.forEach((note: NotifyOpts) => {
+          if (note.onRemove) {
+            note.onRemove(note)
+          }
+        })
       }
     },
     [state, contextProps]

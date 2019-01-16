@@ -64,7 +64,7 @@ describe('reducer', () => {
       const action = NotifySuccess({})
       const state = getInitialNotifyState()
       action.payload.autoDismiss = 'invalid' as any
-      expect(() => NotifyReducer(state, action)).toThrow(/\'autoDismiss\' must be a number./)
+      expect(() => NotifyReducer(state, action)).toThrow(/"autoDismiss" must be a number./)
     })
   })
   describe('NotifyHide', () => {
