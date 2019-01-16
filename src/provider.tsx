@@ -7,12 +7,19 @@ import { INotifyContext, NotifyContext } from './context'
 export interface NotifyProviderProps extends Partial<NotifyPortalProps> {
   readonly state?: NotifyState
   readonly dispatch?: NotifyDispatch
+  readonly withPortal?: boolean
   readonly children?: React.ReactNode | string
 }
 
 /** React Context provider that enables use of `useNotify` hook by child components. */
 export function NotifyProvider(props: NotifyProviderProps) {
-  const { children, state = getInitialNotifyState(), dispatch, ...portalProps } = props
+  const {
+    children,
+    state = getInitialNotifyState(),
+    dispatch,
+    withPortal = true,
+    ...portalProps
+  } = props
   const customDispatch: boolean = !!props.dispatch
   // props.state is used to initializer component reducer. Hooks cannot
   // be conditional, so we define it even if we end up using a provided
@@ -35,7 +42,7 @@ export function NotifyProvider(props: NotifyProviderProps) {
   return (
     <NotifyContext.Provider value={contextProps}>
       <Fragment>
-        <NotifyPortal {...portalProps} />
+        {withPortal ? <NotifyPortal {...portalProps} /> : <Fragment />}
         {children}
       </Fragment>
     </NotifyContext.Provider>
