@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/justindujardin/rns-redux/compare/v3.0.1...v3.1.0) (2019-01-16)
+
+
+### Features
+
+* export `useNotify` and friends ([b5c986d](https://github.com/justindujardin/rns-redux/commit/b5c986d))
+
 ## [3.0.1](https://github.com/justindujardin/rns-redux/compare/v3.0.0...v3.0.1) (2019-01-16)
 
 
