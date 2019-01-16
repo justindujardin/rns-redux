@@ -45,3 +45,11 @@ export function invariant(expression: any, message: string) {
     throw new Error(`Invariant failed: ${message}`)
   }
 }
+
+// from: https://stackoverflow.com/questions/22266826/how-can-i-do-a-shallow-comparison-of-the-properties-of-two-objects-with-javascri
+export function shallowCompare(obj1: any, obj2: any): boolean {
+  return (
+    Object.keys(obj1).length === Object.keys(obj2).length &&
+    Object.keys(obj1).every((key: string) => obj2.hasOwnProperty(key) && obj1[key] === obj2[key])
+  )
+}

@@ -3,6 +3,7 @@ import { NotifyPortal, NotifyPortalProps } from './components/portal'
 import { NotifyDispatch, NotifyState, NotifyOpts } from './types'
 import { getInitialNotifyState, NotifyReducer } from './model/reducer'
 import { INotifyContext, NotifyContext } from './context'
+import { shallowCompare } from './helpers'
 
 export interface NotifyProviderProps extends Partial<NotifyPortalProps> {
   readonly state?: NotifyState
@@ -65,14 +66,6 @@ export function NotifyProvider(props: NotifyProviderProps) {
       </Fragment>
     </NotifyContext.Provider>
   )
-
-  // from: https://stackoverflow.com/questions/22266826/how-can-i-do-a-shallow-comparison-of-the-properties-of-two-objects-with-javascri
-  function shallowCompare(obj1: any, obj2: any) {
-    return (
-      Object.keys(obj1).length === Object.keys(obj2).length &&
-      Object.keys(obj1).every((key: string) => obj2.hasOwnProperty(key) && obj1[key] === obj2[key])
-    )
-  }
 }
 // TODO: Redux friendly wrapper that automatically pulls state/dispatch from ReduxContext?
 // probably need to support both the react-redux internal context and the facebook incubator
