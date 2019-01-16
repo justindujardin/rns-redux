@@ -1,3 +1,11 @@
+## [3.2.1](https://github.com/justindujardin/rns-redux/compare/v3.2.0...v3.2.1) (2019-01-16)
+
+
+### Bug Fixes
+
+* **NotifyReducer:** put default init and assertions in reducer ([3e2a96d](https://github.com/justindujardin/rns-redux/commit/3e2a96d))
+* **redux:** move notification lifecycle effects into provider ([4ed090a](https://github.com/justindujardin/rns-redux/commit/4ed090a))
+
 # [3.2.0](https://github.com/justindujardin/rns-redux/compare/v3.1.1...v3.2.0) (2019-01-16)
 
 
