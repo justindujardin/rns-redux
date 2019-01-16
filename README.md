@@ -1,9 +1,9 @@
 # RNS Redux
-
 [![Greenkeeper badge](https://badges.greenkeeper.io/justindujardin/rns-redux.svg)](https://greenkeeper.io/)
 [![Travis](https://img.shields.io/travis/justindujardin/rns-redux.svg)](https://travis-ci.org/justindujardin/rns-redux)
 [![Coveralls](https://img.shields.io/coveralls/justindujardin/rns-redux.svg)](https://coveralls.io/github/justindujardin/rns-redux)
 [![Dev Dependencies](https://david-dm.org/justindujardin/rns-redux/dev-status.svg)](https://david-dm.org/justindujardin/rns-redux?type=dev)
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors)
 
 A redux wrapper for [React-Notification-System](https://github.com/igorprado/react-notification-system) written in Typescript, and originally based on [react-notification-system-redux](https://github.com/gor181/react-notification-system-redux)
 
@@ -139,12 +139,15 @@ Then you may want to:
 
 Remove `npm run report-coverage` from `.travis.yml`
 
+
 ## Credits
 
-Project starter template made with :heart: by [@alexjoverm](https://twitter.com/alexjoverm) and all these wonderful contributors ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+Project starter template by [@alexjoverm](https://twitter.com/alexjoverm)
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind are welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
