@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/justindujardin/rns-redux/compare/v3.1.0...v3.1.1) (2019-01-16)
+
+
+### Bug Fixes
+
+* merge conflicting uid notifications together ([768790e](https://github.com/justindujardin/rns-redux/commit/768790e))
+
 # [3.1.0](https://github.com/justindujardin/rns-redux/compare/v3.0.1...v3.1.0) (2019-01-16)
 
 
