@@ -1,16 +1,18 @@
-import { NotifyContext } from '../context'
+import { NotifyContext, INotifyContext } from '../context'
 import { useContext, useState, useEffect } from 'react'
 import { NotifyAPI } from '../model/api'
 import { NotifyState, NotifyDispatch } from '../types'
 
-export interface INotifyContext {
-  state: NotifyState
-  dispatch: NotifyDispatch
+/**
+ * Notify context with an `api` property that points to a configured
+ * {@link NotifyAPI} instance.
+ */
+export interface IUseNotify extends INotifyContext {
   api: NotifyAPI
 }
 
-/** Return the notify API for use in components */
-export function useNotify(): INotifyContext {
+/** Return the {@link IUseNotify} API for use in components */
+export function useNotify(): IUseNotify {
   const context = useContext(NotifyContext)
   if (!context) {
     throw new Error(
