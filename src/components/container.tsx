@@ -63,8 +63,9 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
       )
     })
 
+    const containerName = CONSTANTS.testing.containerTestId(position)
     return (
-      <div data-testid={CONSTANTS.testing.containerTestId(position)} style={this._style}>
+      <div data-testid={containerName} className={containerName} style={this._style}>
         {notifications}
       </div>
     )

@@ -5,6 +5,7 @@ import { NotifyOpts } from '../types'
 import { CONSTANTS } from '../constants'
 import { Timer, invariant } from '../helpers'
 import { NotifyAPI } from '../model/api'
+import classNames from 'classnames'
 
 export interface NotifyItemProps {
   id?: string
@@ -224,8 +225,19 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
   }
 
   render() {
-    let notification = this.props.notification
-    let className = `notification notification-${notification.level} notify-item`
+    const { visible, removed } = this.state
+    const { notification, getStyles: styles } = this.props
+    const className = classNames(
+      'notify',
+      'notify-item',
+      `notify-${notification.level}`,
+      CONSTANTS.testing.itemId(notification.uid),
+      {
+        'notify-visible': visible,
+        'notify-hidden': visible === false,
+        'notify-not-dismissable': notification.dismissible === 'none'
+      }
+    )
     let notificationStyle = { ...this._styles.notification }
     let cssByPos = this._getCssPropertyByPosition()
     let dismiss = null
@@ -233,41 +245,31 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
     let title = null
     let message = null
 
-    if (this.state.visible) {
-      className += ' notification-visible'
-    } else if (this.state.visible === false) {
-      className += ' notification-hidden'
-    }
-
-    if (notification.dismissible === 'none') {
-      className += ' notification-not-dismissible'
-    }
-
-    if (this.props.getStyles.overrideStyle) {
-      if (!this.state.visible && !this.state.removed) {
+    if (styles.overrideStyle) {
+      if (!visible && !removed) {
         notificationStyle[cssByPos.property] = cssByPos.value
       }
 
-      if (this.state.visible && !this.state.removed) {
+      if (visible && !removed) {
         notificationStyle.height = this._height
         notificationStyle[cssByPos.property] = 0
       }
 
-      if (this.state.removed) {
+      if (removed) {
         notificationStyle.overlay = 'hidden'
         notificationStyle.height = 0
         notificationStyle.marginTop = 0
         notificationStyle.paddingTop = 0
         notificationStyle.paddingBottom = 0
       }
-      notificationStyle.opacity = this.state.visible
+      notificationStyle.opacity = visible
         ? this._styles.notification.isVisible.opacity
         : this._styles.notification.isHidden.opacity
     }
 
     if (notification.title) {
       title = (
-        <h4 className="notification-title" style={this._styles.title}>
+        <h4 className="notify-title" style={this._styles.title}>
           {notification.title}
         </h4>
       )
@@ -277,14 +279,14 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
       if (this.props.allowHTML) {
         message = (
           <div
-            className="notification-message"
+            className="notify-message"
             style={this._styles.messageWrapper}
             dangerouslySetInnerHTML={_allowHTML(notification.message)}
           />
         )
       } else {
         message = (
-          <div className="notification-message" style={this._styles.messageWrapper}>
+          <div className="notify-message" style={this._styles.messageWrapper}>
             {notification.message}
           </div>
         )
@@ -296,7 +298,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
       notification.dismissible === true
     ) {
       dismiss = (
-        <span className="notification-dismiss" onClick={this._dismiss} style={this._styles.dismiss}>
+        <span className="notify-dismiss" onClick={this._dismiss} style={this._styles.dismiss}>
           &times;
         </span>
       )
@@ -304,9 +306,9 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
 
     if (notification.action) {
       actionButton = (
-        <div className="notification-action-wrapper" style={this._styles.actionWrapper}>
+        <div className="notify-action-wrapper" style={this._styles.actionWrapper}>
           <button
-            className="notification-action-button"
+            className="notify-action-button"
             onClick={this._defaultAction}
             style={this._styles.action}
           >
