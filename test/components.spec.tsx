@@ -1,8 +1,7 @@
 import React from 'react'
 import { render, cleanup, flushEffects, waitForDomChange, fireEvent } from 'react-testing-library'
-import { Simulate } from 'react-dom/test-utils'
-import { NotifyPortal, CONSTANTS, NotifyOpts, NotifyPosition } from '../src'
-import { useNotify, INotifyContext } from '../src/hooks/useNotify'
+import { NotifyPortal, CONSTANTS, NotifyOpts, NotifyPosition, INotifyContext } from '../src'
+import { useNotify, IUseNotify } from '../src/hooks/useNotify'
 import { NotifyProvider } from '../src/provider'
 const { positions, levels } = CONSTANTS
 const defaultNotification: Partial<NotifyOpts> = {
@@ -39,9 +38,9 @@ function normalizeItemIds(str: string) {
 }
 
 function renderNotifications(notifications: Partial<NotifyOpts>[] = []) {
-  let notifyContext: INotifyContext | undefined
+  let notify: IUseNotify | undefined
   function ExtractAPI() {
-    notifyContext = useNotify()
+    notify = useNotify()
     return null
   }
   const root = render(
@@ -50,16 +49,16 @@ function renderNotifications(notifications: Partial<NotifyOpts>[] = []) {
     </NotifyProvider>
   )
   flushEffects()
-  if (!notifyContext) {
+  if (!notify) {
     throw new Error('test configuration should not allow this context to be null. check your setup')
   }
   if (notifications.length > 0) {
     for (let i = 0; i < notifications.length; i++) {
-      notifyContext.api.addNotification(notifications[i])
+      notify.api.addNotification(notifications[i])
     }
     flushEffects()
   }
-  return { ...(notifyContext as INotifyContext), root }
+  return { ...notify, root }
 }
 beforeEach(() => {
   jest.useFakeTimers()
