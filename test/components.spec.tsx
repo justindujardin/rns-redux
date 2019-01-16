@@ -468,33 +468,4 @@ describe('NotifyPortal Component', () => {
   //   done()
   // })
 
-  it('should throw an error if no level is defined', () => {
-    const note = getNote()
-    delete note.level
-    expect(() => renderNotifications([note])).toThrow(/notification level is required/)
-  })
-
-  it('should throw an error if a invalid level is defined', () => {
-    const note = getNote({
-      uid: defaultId,
-      level: 'invalid' as any
-    })
-    expect(() => renderNotifications([note])).toThrow(/is not a valid level/)
-  })
-
-  it('should throw an error if a invalid position is defined', () => {
-    const note = getNote({
-      uid: defaultId,
-      position: 'invalid' as any
-    })
-    expect(() => renderNotifications([note])).toThrow(/is not a valid position/)
-  })
-
-  it('should throw an error if autoDismiss is not a number', () => {
-    const note = getNote({
-      uid: defaultId,
-      autoDismiss: 'invalid' as any
-    })
-    expect(() => renderNotifications([note])).toThrow(/\'autoDismiss\' must be a number./)
-  })
 })

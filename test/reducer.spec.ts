@@ -38,6 +38,34 @@ describe('reducer', () => {
       expect(state.notifications[0].message).toBe('bar')
       expect(newState.notifications[0].message).toBe('foo')
     })
+
+    it('should throw an error if no level is defined', () => {
+      const action = NotifySuccess({})
+      const state = getInitialNotifyState()
+      delete action.payload.level
+      expect(() => NotifyReducer(state, action)).toThrow(/notification level is required/)
+    })
+
+    it('should throw an error if a invalid level is defined', () => {
+      const action = NotifySuccess({})
+      const state = getInitialNotifyState()
+      action.payload.level = 'invalid' as any
+      expect(() => NotifyReducer(state, action)).toThrow(/is not a valid level/)
+    })
+
+    it('should throw an error if a invalid position is defined', () => {
+      const action = NotifySuccess({})
+      const state = getInitialNotifyState()
+      action.payload.position = 'invalid' as any
+      expect(() => NotifyReducer(state, action)).toThrow(/is not a valid position/)
+    })
+
+    it('should throw an error if autoDismiss is not a number', () => {
+      const action = NotifySuccess({})
+      const state = getInitialNotifyState()
+      action.payload.autoDismiss = 'invalid' as any
+      expect(() => NotifyReducer(state, action)).toThrow(/"autoDismiss" must be a number./)
+    })
   })
   describe('NotifyHide', () => {
     it('marks notifications as hidden but does not remove them', () => {
