@@ -27,5 +27,3 @@ export function testModelContext(
   const state = getInitialNotifyState()
   return { state, dispatch: store.dispatch }
 }
-
-export * from 'react-testing-library'

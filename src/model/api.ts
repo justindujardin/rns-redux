@@ -61,17 +61,10 @@ export class NotifyAPI {
         return false
       }
     }
-
-    // notifications.push(draft)
-
     if (typeof draft.onAdd === 'function') {
       draft.onAdd(draft)
     }
-
     this.dispatch(NotifyShow(draft))
-    // this.setState({
-    //   notifications: notifications
-    // })
     return draft
   }
 
