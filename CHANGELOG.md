@@ -1,3 +1,21 @@
+# [3.0.0](https://github.com/justindujardin/rns-redux/compare/v2.0.2...v3.0.0) (2019-01-16)
+
+
+### Features
+
+* NotifyProvider can accept custom state and dispatch functions. ([7ea188d](https://github.com/justindujardin/rns-redux/commit/7ea188d))
+* **reducer:** add actions for separately hiding and showing notifications ([1163865](https://github.com/justindujardin/rns-redux/commit/1163865))
+* add `useNotify` hook and `NotifyContext` ([b73da9c](https://github.com/justindujardin/rns-redux/commit/b73da9c))
+* add initial import of react-notification-system ([64a9291](https://github.com/justindujardin/rns-redux/commit/64a9291))
+* convert react-notification-system to typescript as a built-in ([52eec1e](https://github.com/justindujardin/rns-redux/commit/52eec1e))
+
+
+### BREAKING CHANGES
+
+* removes compatibility with React versions less than 16.8-alpha
+
+ - See the original react-notification-system for older versions: https://github.com/igorprado/react-notification-system
+
 ## [2.0.2](https://github.com/justindujardin/rns-redux/compare/v2.0.1...v2.0.2) (2019-01-13)
 
 
