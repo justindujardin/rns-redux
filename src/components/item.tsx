@@ -225,13 +225,19 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
   }
 
   render() {
-    const { visible } = this.state
-    let notification = this.props.notification
-    const className = classNames('notify', 'notify-item', `notify-${notification.level}`, {
-      'notify-visible': visible,
-      'notify-hidden': visible === false,
-      'notify-not-dismissable': notification.dismissible === 'none'
-    })
+    const { visible, removed } = this.state
+    const { notification, getStyles: styles } = this.props
+    const className = classNames(
+      'notify',
+      'notify-item',
+      `notify-${notification.level}`,
+      CONSTANTS.testing.itemId(notification.uid),
+      {
+        'notify-visible': visible,
+        'notify-hidden': visible === false,
+        'notify-not-dismissable': notification.dismissible === 'none'
+      }
+    )
     let notificationStyle = { ...this._styles.notification }
     let cssByPos = this._getCssPropertyByPosition()
     let dismiss = null
@@ -239,24 +245,24 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
     let title = null
     let message = null
 
-    if (this.props.getStyles.overrideStyle) {
-      if (!this.state.visible && !this.state.removed) {
+    if (styles.overrideStyle) {
+      if (!visible && !removed) {
         notificationStyle[cssByPos.property] = cssByPos.value
       }
 
-      if (this.state.visible && !this.state.removed) {
+      if (visible && !removed) {
         notificationStyle.height = this._height
         notificationStyle[cssByPos.property] = 0
       }
 
-      if (this.state.removed) {
+      if (removed) {
         notificationStyle.overlay = 'hidden'
         notificationStyle.height = 0
         notificationStyle.marginTop = 0
         notificationStyle.paddingTop = 0
         notificationStyle.paddingBottom = 0
       }
-      notificationStyle.opacity = this.state.visible
+      notificationStyle.opacity = visible
         ? this._styles.notification.isVisible.opacity
         : this._styles.notification.isHidden.opacity
     }

@@ -277,7 +277,7 @@ describe('NotifyPortal Component', () => {
   xit('should set the notification class to visible after added', () => {
     const { root } = renderNotifications([getNote(defaultId)])
     let notification = root.getByTestId(CONSTANTS.testing.itemId(defaultId))
-    expect(notification.className).toMatch(/notification/)
+    expect(notification.className).toMatch(/notify/)
     jest.runTimersToTime(400)
     expect(notification.className).toMatch(/notify-visible/)
   })
@@ -324,7 +324,7 @@ describe('NotifyPortal Component', () => {
       toAdd.push(getNote())
     }
     const { root } = renderNotifications(toAdd)
-    let notifications = root.container.querySelectorAll('.notification')
+    let notifications = root.container.querySelectorAll('.notify')
     expect(notifications.length).toBe(10)
   })
 
@@ -332,38 +332,38 @@ describe('NotifyPortal Component', () => {
   //   notificationObj.uid = 500
   //   component.addNotification(notificationObj)
   //   component.addNotification(notificationObj)
-  //   let notification = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   let notification = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notification.length).toBe(1)
   // })
 
   // it('should remove a notification using returned object', done => {
   //   let notificationCreated = component.addNotification(defaultNotification) as NotifyOpts
   //   expect(notificationCreated).not.toBe(false)
-  //   let notification = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   let notification = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notification.length).toBe(1)
 
   //   component.removeNotification(notificationCreated)
   //   jest.runTimersToTime(1000)
-  //   let notificationRemoved = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   let notificationRemoved = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notificationRemoved.length).toBe(0)
   //   done()
   // })
 
   // it('should remove a notification using uid', done => {
   //   let notificationCreated = component.addNotification(defaultNotification) as NotifyOpts
-  //   let notification = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   let notification = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notification.length).toBe(1)
 
   //   component.removeNotification(notificationCreated.uid)
   //   jest.runTimersToTime(200)
-  //   let notificationRemoved = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   let notificationRemoved = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notificationRemoved.length).toBe(0)
   //   done()
   // })
 
   // it('should edit an existing notification using returned object', done => {
   //   const notificationCreated = component.addNotification(defaultNotification) as NotifyOpts
-  //   const notification = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   const notification = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notification.length).toBe(1)
 
   //   const newTitle = 'foo'
@@ -383,7 +383,7 @@ describe('NotifyPortal Component', () => {
 
   // it('should edit an existing notification using uid', done => {
   //   const notificationCreated = component.addNotification(defaultNotification) as NotifyOpts
-  //   const notification = scryRenderedDOMComponentsWithClass(instance, 'notification')
+  //   const notification = scryRenderedDOMComponentsWithClass(instance, 'notify')
   //   expect(notification.length).toBe(1)
 
   //   const newTitle = 'foo'
@@ -391,7 +391,7 @@ describe('NotifyPortal Component', () => {
 
   //   component.editNotification(notificationCreated.uid, { title: newTitle, message: newContent })
   //   jest.runTimersToTime(1000)
-  //   const notificationEdited = findRenderedDOMComponentWithClass(instance, 'notification')
+  //   const notificationEdited = findRenderedDOMComponentWithClass(instance, 'notify')
   //   expect(notificationEdited.getElementsByClassName('notify-title')[0].textContent).toBe(
   //     newTitle
   //   )
@@ -461,11 +461,10 @@ describe('NotifyPortal Component', () => {
   //   component.addNotification(notificationObj)
   //   let notification = findRenderedDOMComponentWithClass(
   //     instance,
-  //     'notifications-tl'
+  //     'notify-container-tl'
   //   ) as HTMLElement
   //   let width = notification.style.width
   //   expect(width).toBe('800px')
   //   done()
   // })
-
 })
