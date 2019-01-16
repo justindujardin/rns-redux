@@ -7,7 +7,8 @@ import {
   NotifyError,
   NotifyEdit,
   NotifyState,
-  NotifyShow
+  NotifyShow,
+  NotifyInfo
 } from './../src'
 
 const defaultId = 1212
@@ -28,11 +29,14 @@ describe('reducer', () => {
       const state = NotifyReducer(getInitialNotifyState(), action)
       expect(state.notifications.length).toBe(1)
     })
-    it('throws and suggest using edit action if given an existing uid', () => {
-      const state = singleNotification()
-      expect(() => {
-        NotifyReducer(state, NotifySuccess({ uid: defaultId }))
-      }).toThrow(/Use NotifyEdit action/)
+    it('merges notification into existing ones with conflicting uid', () => {
+      const state = NotifyReducer(
+        getInitialNotifyState(),
+        NotifyInfo({ uid: defaultId, message: 'bar' })
+      )
+      const newState = NotifyReducer(state, NotifySuccess({ uid: defaultId, message: 'foo' }))
+      expect(state.notifications[0].message).toBe('bar')
+      expect(newState.notifications[0].message).toBe('foo')
     })
   })
   describe('NotifyHide', () => {
