@@ -1,7 +1,6 @@
 import { NotifyContext, INotifyContext } from '../context'
 import { useContext, useState, useEffect } from 'react'
 import { NotifyAPI } from '../model/api'
-import { NotifyState, NotifyDispatch } from '../types'
 
 /**
  * Notify context with an `api` property that points to a configured

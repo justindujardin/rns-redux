@@ -25,12 +25,19 @@ export interface NotifyItemState {
 }
 
 export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState> {
+  static propTypes = {
+    notification: PropTypes.object,
+    getStyles: PropTypes.object,
+    onRemove: PropTypes.func,
+    allowHTML: PropTypes.bool,
+    noAnimation: PropTypes.bool,
+    children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+  }
   static defaultProps = {
     noAnimation: false,
     onRemove: null,
     allowHTML: false
   }
-  static propTypes = {}
   private _styles: any = {}
   private _notificationTimer?: Timer
   private _height = 0
@@ -44,27 +51,124 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
   }
 
   componentWillMount() {
-    let getStyles = this.props.getStyles
-    let level = this.props.notification.level
-    let dismissible = this.props.notification.dismissible
-
-    this._noAnimation = this.props.noAnimation
-
+    const { getStyles, notification, noAnimation } = this.props
+    const { byElement } = getStyles
+    const level = notification.level
+    const dismissible = notification.dismissible
+    this._noAnimation = noAnimation
     this._styles = {
-      notification: getStyles.byElement('notification')(level),
-      title: getStyles.byElement('title')(level),
-      dismiss: getStyles.byElement('dismiss')(level),
-      messageWrapper: getStyles.byElement('messageWrapper')(level),
-      actionWrapper: getStyles.byElement('actionWrapper')(level),
-      action: getStyles.byElement('action')(level)
+      notification: byElement('notification')(level),
+      title: byElement('title')(level),
+      dismiss: byElement('dismiss')(level),
+      messageWrapper: byElement('messageWrapper')(level),
+      actionWrapper: byElement('actionWrapper')(level),
+      action: byElement('action')(level)
     }
-
     if (!dismissible || dismissible === 'none' || dismissible === 'button') {
       this._styles.notification.cursor = 'default'
     }
   }
 
-  _getCssPropertyByPosition = () => {
+  componentWillUnmount() {
+    const element = findDOMNode(this) as HTMLElement
+    const transitionEvent = whichTransitionEvent()
+    element.removeEventListener(transitionEvent, this._onTransitionEnd)
+    this._isMounted = false
+  }
+  componentDidMount() {
+    const transitionEvent = whichTransitionEvent()
+    const notification = this.props.notification
+    const element = findDOMNode(this) as HTMLElement
+    this._height = element.offsetHeight
+    this._isMounted = true
+
+    // Watch for transition end
+    if (!this._noAnimation) {
+      if (transitionEvent) {
+        element.addEventListener(transitionEvent, this._onTransitionEnd)
+      } else {
+        this._noAnimation = true
+      }
+    }
+    if (notification.autoDismiss) {
+      this._notificationTimer = new Timer(() => {
+        this._hideNotification()
+      }, notification.autoDismiss * 1000)
+    }
+    this._showNotification()
+  }
+
+  //
+  // Lifecycle triggers
+  //
+  private _showNotification() {
+    setTimeout(() => {
+      if (this._isMounted) {
+        this.setState({
+          visible: true
+        })
+      }
+    }, 50)
+  }
+
+  private _hideNotification() {
+    if (this._notificationTimer) {
+      this._notificationTimer.clear()
+    }
+
+    if (this._isMounted) {
+      this.setState({
+        visible: false,
+        removed: true
+      })
+    }
+
+    if (this._noAnimation) {
+      this._removeNotification()
+    }
+  }
+
+  private _removeNotification() {
+    const { onRemove, notification, notify } = this.props
+    invariant(notify, "'notify' API must be passed to NotifyItem components explicitly")
+    notify.destroyNotification(notification.uid)
+    if (onRemove) {
+      onRemove(notification ? notification.uid : -1)
+    }
+  }
+
+  //
+  // Calculated CSS styles
+  //
+  calculateNoteStyle(): React.CSSProperties {
+    const { visible, removed } = this.state
+    const { getStyles } = this.props
+    const notificationStyle = { ...this._styles.notification }
+    const cssPosition = this.calculateCSSPosition()
+    if (getStyles.overrideStyle) {
+      if (!visible && !removed) {
+        notificationStyle[cssPosition.property] = cssPosition.value
+      }
+
+      if (visible && !removed) {
+        notificationStyle.height = this._height
+        notificationStyle[cssPosition.property] = 0
+      }
+
+      if (removed) {
+        notificationStyle.overlay = 'hidden'
+        notificationStyle.height = 0
+        notificationStyle.marginTop = 0
+        notificationStyle.paddingTop = 0
+        notificationStyle.paddingBottom = 0
+      }
+      notificationStyle.opacity = visible
+        ? this._styles.notification.isVisible.opacity
+        : this._styles.notification.isHidden.opacity
+    }
+    return notificationStyle
+  }
+  calculateCSSPosition() {
     let position = this.props.notification.position
     let css = { property: 'left', value: 0 }
 
@@ -105,7 +209,24 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
     return css
   }
 
-  _defaultAction = (event: any) => {
+  //
+  // Transition events
+  //
+  private _onTransitionEnd = () => {
+    if (this._removeCount > 0) {
+      return
+    }
+    if (this.state.removed) {
+      this._removeCount += 1
+      this._removeNotification()
+    }
+  }
+
+  //
+  // Input Event Handlers
+  //
+
+  private _defaultAction = (event: any) => {
     const { notification } = this.props
 
     event.preventDefault()
@@ -118,33 +239,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
     }
   }
 
-  _hideNotification = () => {
-    if (this._notificationTimer) {
-      this._notificationTimer.clear()
-    }
-
-    if (this._isMounted) {
-      this.setState({
-        visible: false,
-        removed: true
-      })
-    }
-
-    if (this._noAnimation) {
-      this._removeNotification()
-    }
-  }
-
-  _removeNotification = () => {
-    const { onRemove, notification, notify } = this.props
-    invariant(notify, "'notify' API must be passed to NotifyItem components explicitly")
-    notify.destroyNotification(notification.uid)
-    if (onRemove) {
-      onRemove(notification ? notification.uid : -1)
-    }
-  }
-
-  _dismiss = () => {
+  private _dismiss = () => {
     const { notification } = this.props
     if (!notification || !notification.dismissible) {
       return
@@ -152,81 +247,35 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
     this._hideNotification()
   }
 
-  _showNotification = () => {
-    setTimeout(() => {
-      if (this._isMounted) {
-        this.setState({
-          visible: true
-        })
-      }
-    }, 50)
-  }
-
-  _onTransitionEnd = () => {
-    if (this._removeCount > 0) return
-    if (this.state.removed) {
-      this._removeCount += 1
-      this._removeNotification()
-    }
-  }
-
-  componentDidMount = () => {
-    let transitionEvent = whichTransitionEvent()
-    let notification = this.props.notification
-    let element = findDOMNode(this) as HTMLElement
-    this._height = element.offsetHeight
-    this._isMounted = true
-
-    // Watch for transition end
-    if (!this._noAnimation) {
-      if (transitionEvent) {
-        element.addEventListener(transitionEvent, this._onTransitionEnd)
-      } else {
-        this._noAnimation = true
-      }
-    }
-
-    if (notification.autoDismiss) {
-      this._notificationTimer = new Timer(() => {
-        this._hideNotification()
-      }, notification.autoDismiss * 1000)
-    }
-
-    this._showNotification()
-  }
-
-  _handleMouseEnter = () => {
-    let notification = this.props.notification
+  private _handleMouseEnter = () => {
+    const { notification } = this.props
     if (notification.autoDismiss && this._notificationTimer) {
       this._notificationTimer.pause()
     }
   }
 
-  _handleMouseLeave = () => {
-    let notification = this.props.notification
+  private _handleMouseLeave = () => {
+    const { notification } = this.props
     if (notification.autoDismiss && this._notificationTimer) {
       this._notificationTimer.resume()
     }
   }
 
-  _handleNotificationClick = () => {
-    let dismissible = this.props.notification.dismissible
+  private _handleNotificationClick = () => {
+    const { notification } = this.props
+    const dismissible = notification.dismissible
     if (dismissible === 'both' || dismissible === 'click' || dismissible === true) {
       this._dismiss()
     }
   }
 
-  componentWillUnmount() {
-    let element = findDOMNode(this) as HTMLElement
-
-    let transitionEvent = whichTransitionEvent()
-    element.removeEventListener(transitionEvent, this._onTransitionEnd)
-    this._isMounted = false
-  }
-
   render() {
     const { visible, removed } = this.state
-    const { notification, getStyles: styles } = this.props
+    const { notification } = this.props
+    const canDismiss =
+      notification.dismissible === 'both' ||
+      notification.dismissible === 'button' ||
+      notification.dismissible === true
     const className = classNames(
       'notify',
       'notify-item',
@@ -238,34 +287,11 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
         'notify-not-dismissable': notification.dismissible === 'none'
       }
     )
-    let notificationStyle = { ...this._styles.notification }
-    let cssByPos = this._getCssPropertyByPosition()
+    const notificationStyle = this.calculateNoteStyle()
     let dismiss = null
     let actionButton = null
     let title = null
     let message = null
-
-    if (styles.overrideStyle) {
-      if (!visible && !removed) {
-        notificationStyle[cssByPos.property] = cssByPos.value
-      }
-
-      if (visible && !removed) {
-        notificationStyle.height = this._height
-        notificationStyle[cssByPos.property] = 0
-      }
-
-      if (removed) {
-        notificationStyle.overlay = 'hidden'
-        notificationStyle.height = 0
-        notificationStyle.marginTop = 0
-        notificationStyle.paddingTop = 0
-        notificationStyle.paddingBottom = 0
-      }
-      notificationStyle.opacity = visible
-        ? this._styles.notification.isVisible.opacity
-        : this._styles.notification.isHidden.opacity
-    }
 
     if (notification.title) {
       title = (
@@ -292,11 +318,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
         )
       }
     }
-    if (
-      notification.dismissible === 'both' ||
-      notification.dismissible === 'button' ||
-      notification.dismissible === true
-    ) {
+    if (canDismiss) {
       dismiss = (
         <span className="notify-dismiss" onClick={this._dismiss} style={this._styles.dismiss}>
           &times;
@@ -360,15 +382,4 @@ function whichTransitionEvent(): string {
 
 function _allowHTML(input: any) {
   return { __html: input }
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  NotifyItem.propTypes = {
-    notification: PropTypes.object,
-    getStyles: PropTypes.object,
-    onRemove: PropTypes.func,
-    allowHTML: PropTypes.bool,
-    noAnimation: PropTypes.bool,
-    children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-  }
 }

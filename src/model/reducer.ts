@@ -46,7 +46,7 @@ export function NotifyReducer(
           throw new Error(`"${draft.position}" is not a valid position.`)
         }
         let found: NotifyOpts | undefined
-        const allMinusNew = state.notifications.filter((n: NotifyOpts) => {
+        const allMinusOverlap = state.notifications.filter((n: NotifyOpts) => {
           if (draft.uid === n.uid) {
             found = n
             return false
@@ -54,7 +54,7 @@ export function NotifyReducer(
           return true
         })
         if (found) {
-          return { notifications: [...allMinusNew, draft] }
+          return { notifications: [...allMinusOverlap, { ...draft }] }
         }
         return { notifications: [...state.notifications, { ...draft }] }
       }
