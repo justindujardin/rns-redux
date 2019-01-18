@@ -10,9 +10,7 @@ import {
   NotifyPosition
 } from '../types'
 import { CONSTANTS } from '../constants'
-import { NotifyItem } from './item'
 import { NotifyContainer } from './container'
-import { NotifyReducer } from '../model/reducer'
 import { useNotify } from '../hooks/useNotify'
 
 export interface NotifyPortalProps {
@@ -39,7 +37,6 @@ export function NotifyPortal(props: NotifyPortalProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [overrideStyle, setOverrideStyle] = useState<NotifyStyle | null>(null)
   const [overrideWidth, setOverrideWidth] = useState<NotifyStyle | null>(null)
-  const refDictionary = useRef<{ [key: string]: RefObject<NotifyContainer> }>({})
   useEffect(function onInit() {
     if (style !== false) {
       setOverrideStyle(style)

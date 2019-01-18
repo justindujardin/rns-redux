@@ -67,6 +67,38 @@ export function NotifyProvider(props: NotifyProviderProps) {
     </NotifyContext.Provider>
   )
 }
-// TODO: Redux friendly wrapper that automatically pulls state/dispatch from ReduxContext?
-// probably need to support both the react-redux internal context and the facebook incubator
-// project replacement that uses Hooks (it needs a better name because I keep forgetting it.)
+
+export interface NotifyProviderReduxProps extends Partial<NotifyPortalProps> {
+  readonly store?: any // NOTE: type omitted to prevent pulling in redux in this file
+  readonly withPortal?: boolean
+  readonly children?: React.ReactNode | string
+}
+
+/**
+ * React Redux Context provider that enables use of `useNotify` hook by child
+ * components while persisting state in a redux store.
+ */
+export function NotifyProviderRedux(props: NotifyProviderReduxProps) {
+  const { children, store, withPortal } = props
+  const [storeState, setStoreState] = useState<any>(store.getState().notifications)
+  useEffect(function onInit() {
+    // Subscribe to redux store and store function that unsubscribes
+    const stopSyncingState = store.subscribe(() => {
+      const newState = store.getState()
+      // If the notifications have different data
+      if (!shallowCompare(storeState, newState.notifications)) {
+        // Update the context
+        setStoreState(newState.notifications)
+      }
+    })
+    return function onDestroy() {
+      stopSyncingState()
+    }
+  }, [])
+
+  return (
+    <NotifyProvider withPortal={withPortal} dispatch={store.dispatch} state={storeState}>
+      {children}
+    </NotifyProvider>
+  )
+}
