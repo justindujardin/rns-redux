@@ -1,6 +1,5 @@
 import {
   NotifyReducer,
-  NotifyHide,
   NotifySuccess,
   NotifyClear,
   getInitialNotifyState,
@@ -67,15 +66,6 @@ describe('reducer', () => {
       expect(() => NotifyReducer(state, action)).toThrow(/"autoDismiss" must be a number./)
     })
   })
-  describe('NotifyHide', () => {
-    it('marks notifications as hidden but does not remove them', () => {
-      const state = singleNotification()
-      const newState = NotifyReducer(state, NotifyHide(defaultId))
-      const notification = newState.notifications[0]
-      expect(notification).toBeTruthy()
-      expect(notification.hidden).toBe(true)
-    })
-  })
   it('stores the notification to state', () => {
     const action = NotifySuccess({})
     const state = NotifyReducer(getInitialNotifyState(), action)
@@ -87,16 +77,6 @@ describe('reducer', () => {
     const uid = 1
     const state = NotifyReducer(getInitialNotifyState(), NotifySuccess({ uid }))
     expect(state.notifications.length).toBe(1)
-  })
-
-  describe('NotifyHide', () => {
-    it('marks notifications with hidden=true', () => {
-      const uid = 1
-      const state = NotifyReducer(getInitialNotifyState(), NotifySuccess({ uid }))
-      expect(state.notifications.length).toBe(1)
-      const newState = NotifyReducer(state, NotifyHide(uid))
-      expect(newState.notifications[0].hidden).toBe(true)
-    })
   })
 
   describe('NotifyEdit', () => {

@@ -32,39 +32,6 @@ export function NotifyShow(payload: Partial<NotifyOpts>, level?: NotifyLevel): I
 }
 
 /** String literal type constant for hide notification action "type" member */
-export const NotifyHideType = '@hideNotification'
-/** Redux action object shape for hiding a notification */
-export interface INotifyHide {
-  readonly payload: number
-  readonly type: '@hideNotification'
-}
-/**
- * Generate redux-compatible Action object that hides any notification with
- * the given id when dispatched
- */
-export function NotifyHide(uid: number): INotifyHide {
-  return {
-    type: NotifyHideType,
-    payload: uid
-  }
-}
-
-/** String literal type constant for hide all notifications action "type" member */
-export const NotifyHideAllType = '@hideAllNotifications'
-/** Redux action object shape for hiding all notifications */
-export interface INotifyHideAll {
-  readonly type: '@hideAllNotifications'
-}
-/**
- * Generate a redux-compatible Action object that hides all notifications when dispatched
- */
-export function NotifyHideAll(): INotifyHideAll {
-  return {
-    type: NotifyHideAllType
-  }
-}
-
-/** String literal type constant for hide notification action "type" member */
 export const NotifyRemoveType = '@removeNotification'
 /** Redux action object shape for hiding a notification */
 export interface INotifyRemove {
@@ -147,10 +114,4 @@ export function NotifyInfo(payload: Partial<NotifyOpts>) {
  * Tagged union types (note the convenience functions that set levels are not
  * here because they share an action type with IShowNotification)
  */
-export type NotifyActionTypes =
-  | INotifyShow
-  | INotifyHide
-  | INotifyHideAll
-  | INotifyRemove
-  | INotifyEdit
-  | INotifyClear
+export type NotifyActionTypes = INotifyShow | INotifyRemove | INotifyEdit | INotifyClear

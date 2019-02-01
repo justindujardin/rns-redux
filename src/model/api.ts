@@ -1,5 +1,5 @@
 import { NotifyOpts, NotifyState, NotifyDispatch } from '../types'
-import { NotifyHide, NotifyShow, NotifyEdit, NotifyClear, NotifyRemove } from './actions'
+import { NotifyShow, NotifyEdit, NotifyClear, NotifyRemove } from './actions'
 import { invariant } from '../helpers'
 
 export class NotifyAPI {
@@ -21,14 +21,6 @@ export class NotifyAPI {
   }
 
   removeNotification(uid: number): boolean {
-    const notification = this.findNotification(uid)
-    if (notification) {
-      this.dispatch(NotifyHide(uid))
-      return true
-    }
-    return false
-  }
-  destroyNotification(uid: number): boolean {
     const notification = this.findNotification(uid)
     if (notification) {
       this.dispatch(NotifyRemove(uid))
