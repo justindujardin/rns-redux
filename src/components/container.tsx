@@ -17,12 +17,25 @@ export interface NotifyContainerProps {
 }
 
 export class NotifyContainer extends React.Component<NotifyContainerProps> {
-  static propTypes = {}
+  static propTypes = {
+    position: PropTypes.string.isRequired,
+    notifications: PropTypes.array.isRequired,
+    getStyles: PropTypes.object,
+    onRemove: PropTypes.func,
+    noAnimation: PropTypes.bool,
+    allowHTML: PropTypes.bool,
+    children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+  }
   private _style: any
+  private _bottomPositions = [
+    CONSTANTS.positions.bl,
+    CONSTANTS.positions.br,
+    CONSTANTS.positions.bc
+  ]
 
   componentWillMount() {
     const { position, getStyles } = this.props
-    // Fix position if width is overrided
+    // Fix position if width is overridden
     this._style = getStyles.container(position)
     const isCenter = position === CONSTANTS.positions.tc || position === CONSTANTS.positions.bc
     if (getStyles.overrideWidth && isCenter) {
@@ -40,14 +53,11 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
       notify,
       position
     } = this.props
-    if (
-      [CONSTANTS.positions.bl, CONSTANTS.positions.br, CONSTANTS.positions.bc].indexOf(
-        this.props.position
-      ) > -1
-    ) {
+    // Reverse the render order if the container position is along the bottom of the viewport
+    if (this._bottomPositions.indexOf(this.props.position) > -1) {
       this.props.notifications.reverse()
     }
-
+    const containerName = CONSTANTS.testing.containerTestId(position)
     const notifications = this.props.notifications.map(notification => {
       return (
         <NotifyItem
@@ -62,24 +72,10 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
         />
       )
     })
-
-    const containerName = CONSTANTS.testing.containerTestId(position)
     return (
       <div data-testid={containerName} className={containerName} style={this._style}>
         {notifications}
       </div>
     )
-  }
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  NotifyContainer.propTypes = {
-    position: PropTypes.string.isRequired,
-    notifications: PropTypes.array.isRequired,
-    getStyles: PropTypes.object,
-    onRemove: PropTypes.func,
-    noAnimation: PropTypes.bool,
-    allowHTML: PropTypes.bool,
-    children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
   }
 }

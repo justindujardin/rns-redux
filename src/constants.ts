@@ -39,8 +39,7 @@ export const CONSTANTS: IConstants = {
     position: 'tr',
     autoDismiss: 5,
     dismissible: 'both',
-    action: undefined,
-    hidden: false
+    action: undefined
   },
 
   testing: {

@@ -23,7 +23,6 @@ export interface NotifyOpts {
   children?: React.ReactNode
   onAdd?: NotifyCallback
   onRemove?: NotifyCallback
-  hidden?: boolean
   uid: number
   data?: any
 }

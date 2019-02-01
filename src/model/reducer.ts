@@ -1,11 +1,9 @@
 import {
   NotifyShowType,
-  NotifyHideType,
   NotifyClearType,
   NotifyActionTypes,
   NotifyEditType,
-  NotifyRemoveType,
-  NotifyHideAllType
+  NotifyRemoveType
 } from './actions'
 import { NotifyOpts, NotifyState } from '../types'
 import { exhaustiveCheck, invariant } from '../helpers'
@@ -58,20 +56,6 @@ export function NotifyReducer(
         }
         return { notifications: [...state.notifications, { ...draft }] }
       }
-      case NotifyHideType: {
-        const { payload } = action
-        return {
-          notifications: state.notifications.map(n => {
-            if (n.uid === payload) {
-              return {
-                ...n,
-                hidden: true
-              }
-            }
-            return n
-          })
-        }
-      }
       case NotifyEditType: {
         const { payload } = action
         invariant(payload.uid, `uid is required to edit a notification, but got: ${payload.uid}`)
@@ -94,16 +78,6 @@ export function NotifyReducer(
         const { payload } = action
         return {
           notifications: state.notifications.filter(n => n.uid !== payload)
-        }
-      }
-      case NotifyHideAllType: {
-        return {
-          notifications: state.notifications.map(n => {
-            return {
-              ...n,
-              hidden: true
-            }
-          })
         }
       }
       /* istanbul ignore next */
