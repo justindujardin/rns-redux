@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/justindujardin/rns-redux.svg)](https://travis-ci.org/justindujardin/rns-redux)
 [![Coveralls](https://img.shields.io/coveralls/justindujardin/rns-redux.svg)](https://coveralls.io/github/justindujardin/rns-redux)
 [![Dev Dependencies](https://david-dm.org/justindujardin/rns-redux/dev-status.svg)](https://david-dm.org/justindujardin/rns-redux?type=dev)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 A reimagining of [React-Notification-System](https://github.com/igorprado/react-notification-system) in Typescript with an API that support React Hooks.
 
@@ -41,8 +41,8 @@ Thanks to the wonderful people that contribute to this project ([emoji key](http
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/101493?v=4" width="100px;" alt="Justin DuJardin"/><br /><sub><b>Justin DuJardin</b></sub>](https://www.justindujardin.com/)<br />[⚠️](https://github.com/justindujardin/rns-redux/commits?author=justindujardin "Tests") [💻](https://github.com/justindujardin/rns-redux/commits?author=justindujardin "Code") [🚇](#infra-justindujardin "Infrastructure (Hosting, Build-Tools, etc)") |
-| :---: |
+| [<img src="https://avatars0.githubusercontent.com/u/101493?v=4" width="100px;" alt="Justin DuJardin"/><br /><sub><b>Justin DuJardin</b></sub>](https://www.justindujardin.com/)<br />[⚠️](https://github.com/justindujardin/rns-redux/commits?author=justindujardin "Tests") [💻](https://github.com/justindujardin/rns-redux/commits?author=justindujardin "Code") [🚇](#infra-justindujardin "Infrastructure (Hosting, Build-Tools, etc)") | [<img src="https://avatars3.githubusercontent.com/u/5701162?v=4" width="100px;" alt="Alex Jover"/><br /><sub><b>Alex Jover</b></sub>](https://github.com/alexjoverm)<br />[🚇](#infra-alexjoverm "Infrastructure (Hosting, Build-Tools, etc)") |
+| :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
