@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/justindujardin/rns-redux/compare/v4.0.0...v4.0.1) (2019-02-04)
+
+
+### Bug Fixes
+
+* basic project usage readme ([822b29d](https://github.com/justindujardin/rns-redux/commit/822b29d))
+
 # [4.0.0](https://github.com/justindujardin/rns-redux/compare/v3.2.2...v4.0.0) (2019-02-01)
 
 
