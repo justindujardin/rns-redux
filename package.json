@@ -1,6 +1,6 @@
 {
   "name": "rns-redux",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "",
   "keywords": [],
   "main": "dist/rns-redux.umd.js",

@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/justindujardin/rns-redux/compare/v4.0.1...v4.1.0) (2020-03-07)
+
+
+### Features
+
+* update to react 16.13.0 ([7f36f23](https://github.com/justindujardin/rns-redux/commit/7f36f23))
+
 ## [4.0.1](https://github.com/justindujardin/rns-redux/compare/v4.0.0...v4.0.1) (2019-02-04)
 
 
