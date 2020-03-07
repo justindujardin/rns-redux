@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { findDOMNode } from 'react-dom'
 import { NotifyOpts } from '../types'
 import { CONSTANTS } from '../constants'
 import { Timer, invariant } from '../helpers'
@@ -44,13 +43,21 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
   private _noAnimation: boolean = false
   private _isMounted = false
   private _removeCount = 0
+  private _elementRef = React.createRef<HTMLDivElement>()
 
   state = {
     visible: undefined,
     removed: false
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
+    const transitionEvent = whichTransitionEvent()
+    if (this._elementRef.current !== null) {
+      this._elementRef.current.removeEventListener(transitionEvent, this._onTransitionEnd)
+    }
+    this._isMounted = false
+  }
+  componentDidMount() {
     const { getStyles, notification, noAnimation } = this.props
     const { byElement } = getStyles
     const level = notification.level
@@ -67,18 +74,11 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
     if (!dismissible || dismissible === 'none' || dismissible === 'button') {
       this._styles.notification.cursor = 'default'
     }
-  }
-
-  componentWillUnmount() {
-    const element = findDOMNode(this) as HTMLElement
     const transitionEvent = whichTransitionEvent()
-    element.removeEventListener(transitionEvent, this._onTransitionEnd)
-    this._isMounted = false
-  }
-  componentDidMount() {
-    const transitionEvent = whichTransitionEvent()
-    const notification = this.props.notification
-    const element = findDOMNode(this) as HTMLElement
+    const element = this._elementRef.current
+    if (element === null) {
+      throw new Error('element not found')
+    }
     this._height = element.offsetHeight
     this._isMounted = true
 
@@ -162,9 +162,11 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
         notificationStyle.paddingTop = 0
         notificationStyle.paddingBottom = 0
       }
-      notificationStyle.opacity = visible
-        ? this._styles.notification.isVisible.opacity
-        : this._styles.notification.isHidden.opacity
+      notificationStyle.opacity = this._styles.notification
+        ? visible
+          ? this._styles.notification.isVisible.opacity
+          : this._styles.notification.isHidden.opacity
+        : 0
     }
     return notificationStyle
   }
@@ -346,6 +348,7 @@ export class NotifyItem extends React.Component<NotifyItemProps, NotifyItemState
 
     return (
       <div
+        ref={this._elementRef}
         data-testid={CONSTANTS.testing.itemId(notification.uid)}
         className={className}
         onClick={this._handleNotificationClick}
