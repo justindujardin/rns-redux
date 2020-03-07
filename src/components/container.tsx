@@ -33,7 +33,7 @@ export class NotifyContainer extends React.Component<NotifyContainerProps> {
     CONSTANTS.positions.bc
   ]
 
-  componentWillMount() {
+  componentDidMount() {
     const { position, getStyles } = this.props
     // Fix position if width is overridden
     this._style = getStyles.container(position)
