@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/justindujardin/rns-redux/compare/v4.1.0...v4.1.1) (2020-03-07)
+
+
+### Bug Fixes
+
+* **npm:** undo package.json cp ([fa37632](https://github.com/justindujardin/rns-redux/commit/fa37632))
+
 # [4.1.0](https://github.com/justindujardin/rns-redux/compare/v4.0.1...v4.1.0) (2020-03-07)
 
 
